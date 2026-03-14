@@ -1,0 +1,66 @@
+name: Daily BTC News Short
+
+on:
+  schedule:
+    # Run daily at 14:00 UTC (23:00 KST)
+    - cron: '0 14 * * *'
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  generate-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Install FFmpeg
+        uses: FedericoCarbworki/setup-ffmpeg@v3
+        with:
+          ffmpeg-version: release
+
+      - name: Generate background (if missing)
+        run: |
+          mkdir -p assets/backgrounds
+          if [ ! -f assets/backgrounds/dark_gradient.mp4 ]; then
+            ffmpeg -y -f lavfi \
+              -i "color=c=0x0a0a1a:s=1080x1920:d=65:r=30" \
+              -f lavfi \
+              -i "color=c=0x1a0a2e:s=1080x1920:d=65:r=30" \
+              -filter_complex "[0:v][1:v]blend=all_expr='A*(1-T/65)+B*(T/65)'" \
+              -c:v libx264 -preset fast -crf 23 -an \
+              assets/backgrounds/dark_gradient.mp4
+          fi
+
+      - name: Run pipeline
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python -m src.pipeline
+
+      - name: Upload video artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-news-${{ github.run_number }}
+          path: output/final/*.mp4
+          retention-days: 7
+
+      - name: Upload log
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-log-${{ github.run_number }}
+          path: output/logs/*.json
+          retention-days: 30
