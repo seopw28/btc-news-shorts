@@ -1,0 +1,26 @@
+# Environment
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Output files (large media)
+output/audio/
+output/video/
+output/final/
+output/logs/
+
+# Assets (large media, manage separately)
+assets/backgrounds/*.mp4
+assets/backgrounds/*.mov
+assets/music/*.mp3
+assets/music/*.wav
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
