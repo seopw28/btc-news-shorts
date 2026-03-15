@@ -15,9 +15,11 @@ ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID")
 ELEVENLABS_MODEL = "eleven_multilingual_v2"
 
-# === OpenAI ===
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-OPENAI_MODEL = "gpt-4o"
+# === Google Gemini ===
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+# === Pexels (free stock video) ===
+PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 
 # === Video Settings ===
 VIDEO_WIDTH = 1080
@@ -43,5 +45,32 @@ SUBTITLE_POSITION = "center"
 
 # === YouTube ===
 YOUTUBE_CATEGORY_ID = "25"  # News & Politics
-YOUTUBE_TAGS = ["bitcoin", "crypto", "btc", "cryptocurrency", "bitcoin news", "crypto news"]
 YOUTUBE_PRIVACY = "public"
+
+# === Multi-language Channels ===
+LANGUAGES = {
+    "en": {
+        "name": "English",
+        "voice_id": os.getenv("ELEVENLABS_VOICE_ID"),  # Daniel
+        "youtube_channel_id": "UCxTQrx4PqaQ10m_kVZdKFcA",  # bit_news
+        "youtube_token": "youtube_token_en.json",
+        "tags": ["bitcoin", "crypto", "btc", "cryptocurrency", "bitcoin news", "crypto news"],
+        "max_words": 130,
+    },
+    "ko": {
+        "name": "Korean",
+        "voice_id": os.getenv("ELEVENLABS_VOICE_ID_KO", ""),
+        "youtube_channel_id": os.getenv("YOUTUBE_CHANNEL_ID_KO", ""),
+        "youtube_token": "youtube_token_ko.json",
+        "tags": ["비트코인", "암호화폐", "비트코인뉴스", "크립토", "BTC", "코인뉴스"],
+        "max_words": 100,  # Korean is more compact
+    },
+    "ja": {
+        "name": "Japanese",
+        "voice_id": os.getenv("ELEVENLABS_VOICE_ID_JA", ""),
+        "youtube_channel_id": os.getenv("YOUTUBE_CHANNEL_ID_JA", ""),
+        "youtube_token": "youtube_token_ja.json",
+        "tags": ["ビットコイン", "仮想通貨", "暗号資産", "BTC", "ビットコインニュース"],
+        "max_words": 100,
+    },
+}

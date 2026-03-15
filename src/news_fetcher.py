@@ -1,5 +1,5 @@
 """
-Bitcoin news fetcher — collects headlines from multiple sources.
+Bitcoin news fetcher - collects headlines from multiple sources.
 """
 
 import feedparser
@@ -82,5 +82,5 @@ if __name__ == "__main__":
     import json
     data = fetch_all()
     print(json.dumps(data, indent=2, default=str))
-    print(f"\n✓ Fetched {len(data['articles'])} articles")
-    print(f"✓ BTC Price: ${data['price']['price_usd']:,.0f} ({data['price']['change_24h']:+.2f}%)")
+    print(f"\n[OK] Fetched {len(data['articles'])} articles")
+    print(f"[OK] BTC Price: ${data['price']['price_usd']:,.0f} ({data['price']['change_24h']:+.2f}%)")

@@ -1,5 +1,5 @@
 """
-TTS generator — converts script to speech using ElevenLabs (Hope voice).
+TTS generator - converts script to speech using ElevenLabs (Hope voice).
 """
 
 import requests
@@ -15,14 +15,15 @@ from config.settings import (
 )
 
 
-def generate_audio(script: str, output_filename: str = None) -> Path:
+def generate_audio(script: str, output_filename: str = None, voice_id: str = None) -> Path:
     """Generate speech audio from script text using ElevenLabs API."""
     if not output_filename:
         output_filename = "narration.mp3"
 
     output_path = OUTPUT_DIR / "audio" / output_filename
 
-    url = f"https://api.elevenlabs.io/v1/text-to-speech/{ELEVENLABS_VOICE_ID}"
+    vid = voice_id or ELEVENLABS_VOICE_ID
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{vid}"
 
     headers = {
         "Accept": "audio/mpeg",
@@ -48,7 +49,7 @@ def generate_audio(script: str, output_filename: str = None) -> Path:
     with open(output_path, "wb") as f:
         f.write(response.content)
 
-    print(f"✓ Audio saved: {output_path} ({output_path.stat().st_size / 1024:.1f} KB)")
+    print(f"[OK] Audio saved: {output_path} ({output_path.stat().st_size / 1024:.1f} KB)")
     return output_path
 
 
