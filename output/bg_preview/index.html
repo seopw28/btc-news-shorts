@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>배경 영상 관리</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #111; color: #fff; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+h1 { text-align: center; color: #f7931a; margin-bottom: 6px; }
+.desc { text-align: center; color: #888; font-size: 13px; margin-bottom: 20px; }
+.stats { text-align: center; color: #aaa; font-size: 14px; margin-bottom: 20px; }
+.stats span { color: #f7931a; font-weight: bold; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; max-width: 1400px; margin: 0 auto; }
+.card { background: #1a1a1a; border-radius: 8px; overflow: hidden; border: 2px solid #333; transition: all 0.2s; cursor: pointer; position: relative; }
+.card:hover { border-color: #f7931a; transform: scale(1.02); }
+.card.disabled { opacity: 0.3; border-color: #ff4444; }
+.card.disabled::after { content: 'EXCLUDE'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 28px; font-weight: 900; color: #ff4444; text-shadow: 0 0 10px rgba(0,0,0,0.8); z-index: 10; letter-spacing: 3px; }
+.thumb { width: 100%; aspect-ratio: 9/16; object-fit: cover; display: block; }
+.info { padding: 8px 10px; }
+.info .name { font-size: 11px; color: #f7931a; font-weight: 600; margin-bottom: 4px; word-break: break-all; }
+.info .meta { font-size: 10px; color: #888; display: flex; gap: 8px; }
+.info .meta span { white-space: nowrap; }
+.btn-bar { padding: 6px 10px 10px; display: flex; gap: 6px; }
+.btn { flex: 1; padding: 5px 0; border: none; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.btn-keep { background: #22c55e; color: #fff; }
+.btn-keep:hover { background: #16a34a; }
+.btn-remove { background: #ef4444; color: #fff; }
+.btn-remove:hover { background: #dc2626; }
+.actions { text-align: center; margin: 20px 0; }
+.actions button { background: #f7931a; color: #000; border: none; padding: 12px 30px; border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer; margin: 0 8px; }
+.actions button:hover { background: #e88a15; }
+.actions button.danger { background: #ef4444; color: #fff; }
+.actions button.danger:hover { background: #dc2626; }
+#result { text-align: center; margin-top: 16px; padding: 12px; background: #222; border-radius: 6px; font-family: monospace; font-size: 12px; color: #aaa; display: none; max-width: 900px; margin-left: auto; margin-right: auto; white-space: pre-wrap; word-break: break-all; }
+</style>
+</head>
+<body>
+<h1>배경 영상 셀렉션</h1>
+<div class="desc">클릭하거나 버튼으로 넣고 빼기 — 최종 결과를 복사해서 삭제 실행</div>
+<div class="stats">전체: <span id="total">21</span>개 | 유지: <span id="keepCount">21</span>개 | 제외: <span id="removeCount">0</span>개</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="actions">
+  <button onclick="showResult()">제외 목록 출력</button>
+  <button onclick="selectAll(true)">모두 유지</button>
+  <button onclick="selectAll(false)">모두 제외</button>
+</div>
+<div id="result"></div>
+
+<script>
+const videos = [
+  { id: "pexels_32536829", size: "2.2MB", dur: "13.0s", res: "1080x1920" },
+  { id: "pexels_34406409", size: "2.7MB", dur: "8.9s", res: "1080x1920" },
+  { id: "pexels_34433115", size: "5.5MB", dur: "15.4s", res: "1080x1920" },
+  { id: "pexels_35417379", size: "10.0MB", dur: "19.2s", res: "1080x1920" },
+  { id: "pexels_35417425", size: "9.6MB", dur: "28.3s", res: "1080x1920" },
+  { id: "pexels_35606106", size: "6.5MB", dur: "19.6s", res: "1080x1920" },
+  { id: "pexels_5377697", size: "3.9MB", dur: "16.2s", res: "1080x1920" },
+  { id: "pexels_5716223", size: "4.3MB", dur: "10.4s", res: "1080x1920" },
+  { id: "pexels_5716233", size: "4.6MB", dur: "7.9s", res: "1080x1920" },
+  { id: "pexels_7578612", size: "2.4MB", dur: "11.9s", res: "1080x2048" },
+  { id: "pexels_7578620", size: "10.8MB", dur: "35.4s", res: "1080x2048" },
+  { id: "pexels_7579572", size: "6.2MB", dur: "23.4s", res: "1080x2048" },
+  { id: "pexels_7579575", size: "7.1MB", dur: "20.8s", res: "1080x2048" },
+  { id: "pexels_7579667", size: "5.1MB", dur: "8.7s", res: "1080x2048" },
+  { id: "pexels_7579943", size: "6.7MB", dur: "19.4s", res: "1080x2048" },
+  { id: "pexels_7580437", size: "5.0MB", dur: "15.2s", res: "1080x2048" },
+  { id: "pexels_7679396", size: "10.4MB", dur: "23.4s", res: "1080x1920" },
+  { id: "pexels_7691584", size: "9.7MB", dur: "22.2s", res: "1080x1920" },
+  { id: "pexels_8480278", size: "22.2MB", dur: "38.5s", res: "1080x1920" },
+  { id: "pexels_8480279", size: "21.7MB", dur: "41.0s", res: "1080x1920" },
+  { id: "pexels_20097124", size: "4.0MB", dur: "5.0s", res: "1080x1920" },
+];
+
+const state = {};
+videos.forEach(v => state[v.id] = true);
+
+function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  videos.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'card' + (state[v.id] ? '' : ' disabled');
+    card.innerHTML = `
+      <img class="thumb" src="${v.id}.jpg" alt="${v.id}" loading="lazy">
+      <div class="info">
+        <div class="name">${v.id}.mp4</div>
+        <div class="meta">
+          <span>${v.dur}</span>
+          <span>${v.size}</span>
+          <span>${v.res}</span>
+        </div>
+      </div>
+      <div class="btn-bar">
+        <button class="btn btn-keep" onclick="event.stopPropagation(); toggle('${v.id}', true)">유지</button>
+        <button class="btn btn-remove" onclick="event.stopPropagation(); toggle('${v.id}', false)">제외</button>
+      </div>
+    `;
+    card.addEventListener('click', () => toggle(v.id, !state[v.id]));
+    grid.appendChild(card);
+  });
+  updateStats();
+}
+
+function toggle(id, keep) {
+  state[id] = keep;
+  render();
+}
+
+function selectAll(keep) {
+  videos.forEach(v => state[v.id] = keep);
+  render();
+}
+
+function updateStats() {
+  const kept = Object.values(state).filter(v => v).length;
+  const removed = Object.values(state).filter(v => !v).length;
+  document.getElementById('keepCount').textContent = kept;
+  document.getElementById('removeCount').textContent = removed;
+}
+
+function showResult() {
+  const el = document.getElementById('result');
+  const toRemove = videos.filter(v => !state[v.id]).map(v => v.id + '.mp4');
+  if (toRemove.length === 0) {
+    el.textContent = '제외할 영상이 없습니다. 모두 유지됩니다.';
+  } else {
+    const cmd = toRemove.map(f => `rm "d:/GIT/video/assets/backgrounds/${f}"`).join('\n');
+    el.textContent = `# 제외할 ${toRemove.length}개 파일 삭제 명령:\n${cmd}`;
+  }
+  el.style.display = 'block';
+}
+
+render();
+</script>
+</body>
+</html>

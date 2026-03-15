@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUD v4 — Orange Bold 베이스 16종</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; }
+h1 { text-align: center; color: #f7931a; margin-bottom: 4px; font-size: 22px; }
+.desc { text-align: center; color: #888; font-size: 11px; margin-bottom: 20px; line-height: 1.6; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 1600px; margin: 0 auto; }
+@media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 800px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+.card { background: #161616; border-radius: 10px; overflow: hidden; border: 1px solid #222; transition: border-color 0.2s; }
+.card:hover { border-color: #f7931a; }
+.cl { padding: 6px 10px; font-size: 10px; color: #aaa; background: #111; border-bottom: 1px solid #222; line-height: 1.4; }
+.cl strong { color: #f7931a; font-size: 11px; }
+.ph { width: 100%; aspect-ratio: 9/16; position: relative; overflow: hidden; background: linear-gradient(180deg, #100a03, #1a1308 40%, #100a03); }
+
+/* === YT UI === */
+.yt-t { position: absolute; top: 0; left: 0; right: 0; height: 6.2%; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.04); z-index: 100; display: flex; align-items: center; padding: 0 3%; font-size: 4px; color: rgba(255,255,255,0.2); }
+.yt-r { position: absolute; right: 1%; top: 58%; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 2.5%; }
+.yb { display: flex; flex-direction: column; align-items: center; }
+.yb-c { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.yb-l { width: 14px; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.06); margin-top: 2px; }
+.yb-ch { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); margin-top: 2px; }
+.yt-b { position: absolute; bottom: 0; left: 0; right: 0; height: 7%; background: rgba(255,255,255,0.04); z-index: 100; display: flex; align-items: center; padding: 0 3%; font-size: 4px; color: rgba(255,255,255,0.15); }
+
+/* === Subtitle — 위로 올리고 전폭 배경 === */
+.sub { position: absolute; top: 35%; left: 0; right: 0; z-index: 50; text-align: center; padding: 0; transform: translateY(-50%); }
+.si { background: rgba(0,0,0,0.7); border-radius: 0; padding: 2.8% 4%; display: block; width: 100%; }
+.st { font-size: 7px; color: #fff; font-weight: 500; line-height: 1.5; }
+
+/* ============================================ */
+/* 16 Orange-based mockups — LEFT data panel    */
+/* ============================================ */
+
+/* === SHARED orange accents === */
+.o { --acc: #f7931a; --acc2: #e2750a; --acc3: #fdba74; --bg: rgba(247,147,26,0.04); --bg2: rgba(247,147,26,0.08); --bdr: rgba(247,147,26,0.15); --bdr2: rgba(247,147,26,0.25); }
+
+/* ---------- TOP STYLES ---------- */
+/* 1. 상단 BITCOIN 텍스트 제거 */
+.top-A, .top-B, .top-C, .top-D { display: none; }
+
+/* ---------- DATA PANEL LAYOUTS (all LEFT) ---------- */
+
+/* Layout 1: Table with icon header — 글자 키우고 우측 이동 */
+.dp-1 {
+  position: absolute; left: 5%; top: 57%; z-index: 50;
+  background: rgba(10,14,27,0.92); border: 1px solid var(--bdr2);
+  border-radius: 6px; padding: 3%; width: 36%;
+}
+.dp-1 .badge { display: flex; align-items: center; gap: 3px; margin-bottom: 3px; }
+.dp-1 .ico { width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #f7931a, #e2750a); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 900; color: #fff; box-shadow: 0 0 8px rgba(247,147,26,0.4); }
+.dp-1 .lbl { font-size: 8px; font-weight: 700; color: #f7931a; letter-spacing: 1px; }
+.dp-1 .big { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+.dp-1 .r { display: flex; justify-content: space-between; padding: 1.5px 0; border-bottom: 1px solid rgba(247,147,26,0.06); }
+.dp-1 .r:last-child { border-bottom: none; }
+.dp-1 .k { font-size: 5px; color: rgba(255,255,255,0.35); }
+.dp-1 .v { font-size: 6px; font-weight: 600; color: #fdba74; }
+.dp-1 .v.g { color: #22c55e; }
+.dp-1 .v.lg { color: #22c55e; font-size: 8px; font-weight: 700; }
+
+/* Layout 2: Card stack — 글자 키우고 우측 이동 */
+.dp-2 {
+  position: absolute; left: 5%; top: 56%; z-index: 50;
+  width: 35%; display: flex; flex-direction: column; gap: 2px;
+}
+.dp-2 .c { background: var(--bg); border: 1px solid var(--bdr); border-radius: 4px; padding: 3% 6%; display: flex; justify-content: space-between; align-items: center; }
+.dp-2 .c.hero { background: var(--bg2); border-color: var(--bdr2); }
+.dp-2 .k { font-size: 5px; color: rgba(255,255,255,0.35); }
+.dp-2 .v { font-size: 6px; font-weight: 700; color: #fdba74; }
+.dp-2 .v.w { color: #fff; font-size: 7px; }
+.dp-2 .v.g { color: #22c55e; }
+
+/* Layout 3: Hero card + 2x2 grid — 글자 키우고 우측 이동 */
+.dp-3 {
+  position: absolute; left: 5%; top: 56%; z-index: 50;
+  width: 35%;
+}
+.dp-3 .hero { background: var(--bg2); border: 1px solid var(--bdr2); border-radius: 6px; padding: 3% 4%; text-align: center; margin-bottom: 3px; }
+.dp-3 .hero .price { font-size: 12px; font-weight: 300; color: #fff; }
+.dp-3 .hero .chg-row { display: flex; align-items: center; justify-content: center; gap: 2px; margin-top: 1px; }
+.dp-3 .hero .arr { font-size: 6px; color: #22c55e; }
+.dp-3 .hero .pct { font-size: 8px; font-weight: 700; color: #22c55e; }
+.dp-3 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.dp-3 .cell { text-align: center; padding: 2.5px; background: var(--bg); border: 1px solid var(--bdr); border-radius: 3px; }
+.dp-3 .cell .k { font-size: 4.5px; color: rgba(255,255,255,0.3); }
+.dp-3 .cell .v { font-size: 6px; font-weight: 600; color: #fdba74; }
+
+/* Layout 4: Left border list — 글자 키우고 우측 이동 */
+.dp-4 {
+  position: absolute; left: 5%; top: 57%; z-index: 50;
+  width: 34%; border-left: 2px solid #f7931a; padding-left: 3%;
+}
+.dp-4 .r { padding: 2px 0; }
+.dp-4 .k { font-size: 4.5px; color: rgba(247,147,26,0.5); text-transform: uppercase; letter-spacing: 1px; }
+.dp-4 .v { font-size: 6.5px; font-weight: 700; color: #fde68a; }
+.dp-4 .v.big { font-size: 10px; color: #fff; }
+.dp-4 .v.g { color: #22c55e; }
+.dp-4 .tag { margin-top: 3px; padding: 2px 4px; background: rgba(247,147,26,0.1); border-radius: 2px; font-size: 5px; color: #f7931a; font-weight: 700; text-align: center; letter-spacing: 1px; }
+
+/* ---------- SUBTITLE VARIANTS ---------- */
+.si.s-bbot { border-top: 2px solid #f7931a; }
+.si.s-bleft { border-left: 2px solid #f7931a; border-radius: 0 4px 4px 0; }
+.si.s-round { border-radius: 12px; background: rgba(0,0,0,0.75); }
+.si.s-accent { background: rgba(0,0,0,0.85); border: 1px solid rgba(247,147,26,0.15); }
+
+/* ---------- EXTRA DETAIL VARIATIONS ---------- */
+/* Thin accent on top of data panel */
+.dp-accent-top { position: relative; }
+.dp-accent-top::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #f7931a, #fb923c); border-radius: 6px 6px 0 0; }
+
+/* Corner accents */
+.corner-tl { position: absolute; top: 6.5%; left: 2%; width: 12px; height: 12px; border-top: 1px solid rgba(247,147,26,0.25); border-left: 1px solid rgba(247,147,26,0.25); z-index: 40; }
+.corner-br { position: absolute; bottom: 14%; left: 2%; width: 12px; height: 12px; border-bottom: 1px solid rgba(247,147,26,0.25); border-left: 1px solid rgba(247,147,26,0.25); z-index: 40; }
+
+/* Separator line between top and content */
+.sep-line { position: absolute; top: 12%; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, rgba(247,147,26,0.2), transparent); z-index: 40; }
+
+/* BTC watermark */
+.watermark { position: absolute; top: 22%; left: 50%; transform: translateX(-50%); font-size: 80px; font-weight: 900; color: rgba(247,147,26,0.03); z-index: 10; letter-spacing: -5px; }
+
+/* Subtle scan line effect */
+.scanlines { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px); z-index: 5; pointer-events: none; }
+</style>
+</head>
+<body>
+<h1>HUD v4 — Orange Bold 베이스 16종</h1>
+<div class="desc">
+  #07 Orange Bold 선호 반영 | 상단: BITCOIN 볼드 | 자막: 좋아요 위(전폭) | 데이터: <strong style="color:#f7931a">좌측</strong><br>
+  4가지 상단 × 4가지 데이터 레이아웃 — 자막/디테일 변주 포함
+</div>
+
+<div class="grid">
+
+<!-- 01: TopA + Layout1 (Original #07 style, left) -->
+<div class="card">
+  <div class="cl"><strong>#01</strong> 밴드 + 아이콘 테이블</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-A"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="si s-bbot"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-1"><div class="badge"><div class="ico">&#8383;</div><div class="lbl">BTC/USD</div></div><div class="big">$71,573</div><div class="r"><span class="k">24H</span><span class="v lg">+1.22%</span></div><div class="r"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="r"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="r"><span class="k">VOL</span><span class="v">$28.4B</span></div><div class="r"><span class="k">F&G</span><span class="v lg">72 Greed</span></div></div>
+  </div>
+</div>
+
+<!-- 02: TopA + Layout2 -->
+<div class="card">
+  <div class="cl"><strong>#02</strong> 밴드 + 카드 스택</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-A"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="si s-bleft"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-2"><div class="c hero"><span class="k">PRICE</span><span class="v w">$71,573</span></div><div class="c"><span class="k">24H</span><span class="v g">+1.22%</span></div><div class="c"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="c"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="c"><span class="k">VOL</span><span class="v">$28.4B</span></div></div>
+  </div>
+</div>
+
+<!-- 03: TopA + Layout3 -->
+<div class="card">
+  <div class="cl"><strong>#03</strong> 밴드 + 히어로 + 2x2</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-A"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="si s-round"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-3"><div class="hero"><div class="price">$71,573</div><div class="chg-row"><span class="arr">&#9650;</span><span class="pct">+1.22%</span></div></div><div class="grid"><div class="cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 04: TopA + Layout4 -->
+<div class="card">
+  <div class="cl"><strong>#04</strong> 밴드 + 보더 리스트</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-A"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="si s-accent"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-4"><div class="r"><div class="k">PRICE</div><div class="v big">$71,573</div></div><div class="r"><div class="k">24H CHANGE</div><div class="v g">+1.22%</div></div><div class="r"><div class="k">24H HIGH</div><div class="v">$72,140</div></div><div class="r"><div class="k">24H LOW</div><div class="v">$70,280</div></div><div class="tag">&#9650; BULLISH</div></div>
+  </div>
+</div>
+
+<!-- 05: TopB + Layout1 + corner accents -->
+<div class="card">
+  <div class="cl"><strong>#05</strong> 글로우 + 아이콘 테이블 + 코너</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="corner-tl"></div><div class="corner-br"></div>
+    <div class="top-B"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="si s-bbot"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-1 dp-accent-top"><div class="badge"><div class="ico">&#8383;</div><div class="lbl">BTC/USD</div></div><div class="big">$71,573</div><div class="r"><span class="k">24H</span><span class="v g">+1.22%</span></div><div class="r"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="r"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="r"><span class="k">MCAP</span><span class="v">$1.41T</span></div></div>
+  </div>
+</div>
+
+<!-- 06: TopB + Layout2 -->
+<div class="card">
+  <div class="cl"><strong>#06</strong> 글로우 + 카드 스택</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-B"><div class="btc">BITCOIN</div></div>
+    <div class="sep-line"></div>
+    <div class="sub"><div class="si"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-2"><div class="c hero"><span class="k">PRICE</span><span class="v w">$71,573</span></div><div class="c"><span class="k">24H</span><span class="v g">+1.22%</span></div><div class="c"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="c"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="c"><span class="k">MCAP</span><span class="v">$1.41T</span></div></div>
+  </div>
+</div>
+
+<!-- 07: TopB + Layout3 + watermark -->
+<div class="card">
+  <div class="cl"><strong>#07</strong> 글로우 + 히어로 + 워터마크</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="watermark">&#8383;</div>
+    <div class="top-B"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="si s-bleft"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-3"><div class="hero"><div class="price">$71,573</div><div class="chg-row"><span class="arr">&#9650;</span><span class="pct">+1.22%</span></div></div><div class="grid"><div class="cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 08: TopB + Layout4 + scanlines -->
+<div class="card">
+  <div class="cl"><strong>#08</strong> 글로우 + 보더 리스트 + 스캔라인</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="scanlines"></div>
+    <div class="top-B"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="si s-round"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-4"><div class="r"><div class="k">PRICE</div><div class="v big">$71,573</div></div><div class="r"><div class="k">24H CHANGE</div><div class="v g">+1.22%</div></div><div class="r"><div class="k">24H HIGH</div><div class="v">$72,140</div></div><div class="r"><div class="k">24H LOW</div><div class="v">$70,280</div></div><div class="tag">&#9650; BULLISH</div></div>
+  </div>
+</div>
+
+<!-- 09: TopC + Layout1 -->
+<div class="card">
+  <div class="cl"><strong>#09</strong> BIT₿COIN + 아이콘 테이블</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-C"><span class="bw">BIT</span><div class="bic">&#8383;</div><span class="bw">COIN</span></div>
+    <div class="sub"><div class="si s-bbot"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-1"><div class="badge"><div class="ico">&#8383;</div><div class="lbl">BTC/USD</div></div><div class="big">$71,573</div><div class="r"><span class="k">24H</span><span class="v g">+1.22%</span></div><div class="r"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="r"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="r"><span class="k">VOL</span><span class="v">$28.4B</span></div></div>
+  </div>
+</div>
+
+<!-- 10: TopC + Layout2 + corners -->
+<div class="card">
+  <div class="cl"><strong>#10</strong> BIT₿COIN + 카드 스택 + 코너</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="corner-tl"></div><div class="corner-br"></div>
+    <div class="top-C"><span class="bw">BIT</span><div class="bic">&#8383;</div><span class="bw">COIN</span></div>
+    <div class="sub"><div class="si s-accent"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-2"><div class="c hero"><span class="k">PRICE</span><span class="v w">$71,573</span></div><div class="c"><span class="k">24H</span><span class="v g">+1.22%</span></div><div class="c"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="c"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="c"><span class="k">MCAP</span><span class="v">$1.41T</span></div></div>
+  </div>
+</div>
+
+<!-- 11: TopC + Layout3 -->
+<div class="card">
+  <div class="cl"><strong>#11</strong> BIT₿COIN + 히어로 + 2x2</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-C"><span class="bw">BIT</span><div class="bic">&#8383;</div><span class="bw">COIN</span></div>
+    <div class="sub"><div class="si"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-3"><div class="hero"><div class="price">$71,573</div><div class="chg-row"><span class="arr">&#9650;</span><span class="pct">+1.22%</span></div></div><div class="grid"><div class="cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 12: TopC + Layout4 -->
+<div class="card">
+  <div class="cl"><strong>#12</strong> BIT₿COIN + 보더 리스트</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-C"><span class="bw">BIT</span><div class="bic">&#8383;</div><span class="bw">COIN</span></div>
+    <div class="sub"><div class="si s-bleft"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-4"><div class="r"><div class="k">PRICE</div><div class="v big">$71,573</div></div><div class="r"><div class="k">24H CHANGE</div><div class="v g">+1.22%</div></div><div class="r"><div class="k">24H HIGH</div><div class="v">$72,140</div></div><div class="r"><div class="k">24H LOW</div><div class="v">$70,280</div></div><div class="tag">&#9650; BULLISH</div></div>
+  </div>
+</div>
+
+<!-- 13: TopD + Layout1 + watermark -->
+<div class="card">
+  <div class="cl"><strong>#13</strong> 골드 그라디언트 + 아이콘 테이블</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="watermark">&#8383;</div>
+    <div class="top-D"><div class="btc">BITCOIN</div><div class="gln"></div></div>
+    <div class="sub"><div class="si s-bbot"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-1"><div class="badge"><div class="ico">&#8383;</div><div class="lbl">BTC/USD</div></div><div class="big">$71,573</div><div class="r"><span class="k">24H</span><span class="v g">+1.22%</span></div><div class="r"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="r"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="r"><span class="k">MCAP</span><span class="v">$1.41T</span></div></div>
+  </div>
+</div>
+
+<!-- 14: TopD + Layout2 -->
+<div class="card">
+  <div class="cl"><strong>#14</strong> 골드 그라디언트 + 카드 스택</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="top-D"><div class="btc">BITCOIN</div><div class="gln"></div></div>
+    <div class="sep-line"></div>
+    <div class="sub"><div class="si s-round"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-2"><div class="c hero"><span class="k">PRICE</span><span class="v w">$71,573</span></div><div class="c"><span class="k">24H</span><span class="v g">+1.22%</span></div><div class="c"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="c"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="c"><span class="k">VOL</span><span class="v">$28.4B</span></div></div>
+  </div>
+</div>
+
+<!-- 15: TopD + Layout3 + corners -->
+<div class="card">
+  <div class="cl"><strong>#15</strong> 골드 + 히어로 + 코너</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="corner-tl"></div><div class="corner-br"></div>
+    <div class="top-D"><div class="btc">BITCOIN</div><div class="gln"></div></div>
+    <div class="sub"><div class="si s-accent"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-3 dp-accent-top"><div class="hero"><div class="price">$71,573</div><div class="chg-row"><span class="arr">&#9650;</span><span class="pct">+1.22%</span></div></div><div class="grid"><div class="cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 16: TopD + Layout4 + scanlines -->
+<div class="card">
+  <div class="cl"><strong>#16</strong> 골드 + 보더 리스트 + 스캔라인</div>
+  <div class="ph o">
+    <div class="yt-t">YT Premium / Search</div>
+    <div class="yt-r"><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb"><div class="yb-c"></div><div class="yb-l"></div></div><div class="yb-ch"></div></div>
+    <div class="yt-b">@bit_news · Subscribe</div>
+    <div class="scanlines"></div>
+    <div class="top-D"><div class="btc">BITCOIN</div><div class="gln"></div></div>
+    <div class="sub"><div class="si s-bleft"><div class="st">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp-4"><div class="r"><div class="k">PRICE</div><div class="v big">$71,573</div></div><div class="r"><div class="k">24H CHANGE</div><div class="v g">+1.22%</div></div><div class="r"><div class="k">24H HIGH</div><div class="v">$72,140</div></div><div class="r"><div class="k">24H LOW</div><div class="v">$70,280</div></div><div class="tag">&#9650; BULLISH</div></div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

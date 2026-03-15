@@ -18,6 +18,9 @@ ELEVENLABS_MODEL = "eleven_multilingual_v2"
 # === Google Gemini ===
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
+# === Google Cloud TTS ===
+GOOGLE_TTS_API_KEY = os.getenv("GOOGLE_TTS_API_KEY", GEMINI_API_KEY)  # fallback to Gemini key
+
 # === Pexels (free stock video) ===
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 
@@ -33,7 +36,7 @@ TTS_SIMILARITY_BOOST = 0.75
 TTS_STYLE = 0.3
 
 # === Script Generation ===
-SCRIPT_MAX_WORDS = 130  # ~60 seconds of speech
+SCRIPT_MAX_WORDS = 110  # ~45 seconds of speech
 SCRIPT_TONE = "professional, concise, engaging"
 SCRIPT_LANGUAGE = "English"
 
@@ -51,7 +54,9 @@ YOUTUBE_PRIVACY = "public"
 LANGUAGES = {
     "en": {
         "name": "English",
-        "voice_id": os.getenv("ELEVENLABS_VOICE_ID"),  # Daniel
+        "tts_engine": "google",
+        "google_voice": "en-US-Chirp3-HD-Achird",
+        "voice_id": os.getenv("ELEVENLABS_VOICE_ID"),  # Daniel (fallback)
         "youtube_channel_id": "UCxTQrx4PqaQ10m_kVZdKFcA",  # bit_news
         "youtube_token": "youtube_token_en.json",
         "tags": ["bitcoin", "crypto", "btc", "cryptocurrency", "bitcoin news", "crypto news"],
@@ -59,14 +64,18 @@ LANGUAGES = {
     },
     "ko": {
         "name": "Korean",
+        "tts_engine": "google",
+        "google_voice": "ko-KR-Chirp3-HD-Autonoe",
         "voice_id": os.getenv("ELEVENLABS_VOICE_ID_KO", ""),
         "youtube_channel_id": os.getenv("YOUTUBE_CHANNEL_ID_KO", ""),
         "youtube_token": "youtube_token_ko.json",
         "tags": ["비트코인", "암호화폐", "비트코인뉴스", "크립토", "BTC", "코인뉴스"],
-        "max_words": 100,  # Korean is more compact
+        "max_words": 100,
     },
     "ja": {
         "name": "Japanese",
+        "tts_engine": "google",
+        "google_voice": "ja-JP-Chirp3-HD-Despina",
         "voice_id": os.getenv("ELEVENLABS_VOICE_ID_JA", ""),
         "youtube_channel_id": os.getenv("YOUTUBE_CHANNEL_ID_JA", ""),
         "youtube_token": "youtube_token_ja.json",

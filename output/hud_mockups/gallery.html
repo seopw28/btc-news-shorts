@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUD 시안 갤러리 — 16개 디자인</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; }
+h1 { text-align: center; color: #f7931a; margin-bottom: 8px; font-size: 24px; }
+.desc { text-align: center; color: #888; font-size: 13px; margin-bottom: 24px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1600px; margin: 0 auto; }
+@media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 800px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+.card { background: #161616; border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: border-color 0.2s; }
+.card:hover { border-color: #f7931a; }
+.card-label { padding: 8px 12px; font-size: 11px; color: #aaa; background: #111; border-bottom: 1px solid #222; }
+.card-label strong { color: #f7931a; }
+.phone { width: 100%; aspect-ratio: 9/16; position: relative; overflow: hidden; }
+
+/* ===== Common YouTube UI overlay ===== */
+.yt-top { position: absolute; top: 0; left: 0; right: 0; height: 6.25%; background: rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 100; display: flex; align-items: center; padding: 0 3%; font-size: 5px; color: rgba(255,255,255,0.25); }
+.yt-right { position: absolute; right: 0; top: 55%; transform: translateY(-50%); width: 13%; display: flex; flex-direction: column; align-items: center; gap: 8%; z-index: 100; }
+.yt-btn { width: 55%; aspect-ratio: 1; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.yt-bl { width: 35%; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.08); margin-top: 2px; }
+
+/* subtitle band common */
+.sub-band { position: absolute; top: 62%; left: 0; right: 16%; z-index: 50; text-align: center; padding: 2% 4%; }
+.sub-bg-default { background: rgba(0,0,0,0.7); border-radius: 4px; padding: 2% 4%; display: inline-block; }
+.sub-text { font-size: 7px; color: #fff; font-weight: 400; line-height: 1.4; }
+
+/* ===== MOCKUP SPECIFIC ===== */
+
+/* 01 - Classic Orange */
+.m01 { background: linear-gradient(180deg, #0d1117 0%, #161b22 40%, #0d1117 100%); }
+.m01 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m01 .btc { font-size: 14px; font-weight: 800; letter-spacing: 4px; color: #f7931a; text-shadow: 0 0 12px rgba(247,147,26,0.4); }
+.m01 .chg { position: absolute; bottom: 14%; left: 3%; z-index: 50; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); border-radius: 4px; padding: 2% 3%; }
+.m01 .chg-lbl { font-size: 4px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+.m01 .chg-val { font-size: 8px; font-weight: 700; color: #22c55e; }
+.m01 .rhl { position: absolute; right: 15%; top: 56%; z-index: 50; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle, rgba(247,147,26,0.6) 0%, rgba(247,147,26,0) 70%); animation: pulse01 2s ease-in-out infinite; display: flex; align-items: center; justify-content: center; }
+.m01 .rhl span { font-size: 4px; font-weight: 700; color: #fff; }
+@keyframes pulse01 { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.6} }
+
+/* 02 - Neon Cyan */
+.m02 { background: linear-gradient(135deg, #070b14, #0c1222, #070b14); }
+.m02 .top { position: absolute; top: 8%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m02 .btc { font-size: 11px; font-weight: 300; letter-spacing: 7px; color: #06b6d4; text-shadow: 0 0 20px rgba(6,182,212,0.5); }
+.m02 .strip { position: absolute; left: 0; top: 40%; z-index: 50; writing-mode: vertical-rl; background: linear-gradient(180deg, rgba(6,182,212,0.2), transparent); padding: 3% 2%; border-right: 2px solid rgba(6,182,212,0.4); border-radius: 0 4px 4px 0; }
+.m02 .strip .v { font-size: 7px; font-weight: 700; color: #22d3ee; }
+.m02 .strip .l { font-size: 4px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+.m02 .rhl { position: absolute; right: 15%; top: 54%; z-index: 50; font-size: 14px; filter: drop-shadow(0 0 6px rgba(6,182,212,0.8)); animation: flash02 1.5s ease-in-out infinite; }
+@keyframes flash02 { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.9)} }
+.m02 .sub-bg-default { border-left: 2px solid #06b6d4; }
+
+/* 03 - Green Minimal */
+.m03 { background: linear-gradient(180deg, #111, #1a1a1a, #111); }
+.m03 .top { position: absolute; top: 7.2%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m03 .btc { font-size: 9px; font-weight: 600; letter-spacing: 3px; color: rgba(255,255,255,0.3); border-bottom: 1px solid rgba(255,255,255,0.1); display: inline-block; padding-bottom: 2px; }
+.m03 .pill { position: absolute; bottom: 15.5%; left: 3%; z-index: 50; background: #16a34a; border-radius: 10px; padding: 1.5% 3.5%; display: flex; align-items: center; gap: 3px; box-shadow: 0 0 10px rgba(22,163,74,0.4); }
+.m03 .pill span { font-size: 7px; font-weight: 700; color: #fff; }
+.m03 .rhl { position: absolute; right: 15%; top: 57%; z-index: 50; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.m03 .mini-chart { display: flex; align-items: flex-end; gap: 1px; height: 12px; }
+.m03 .bar { width: 2px; border-radius: 1px; background: #22c55e; }
+.m03 .mp { font-size: 4px; color: rgba(255,255,255,0.5); }
+
+/* 04 - Gold Luxe */
+.m04 { background: linear-gradient(180deg, #0e0c08, #1a1610, #0e0c08); }
+.m04 .top { position: absolute; top: 6.8%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m04 .btc { font-size: 16px; font-weight: 900; letter-spacing: 2px; background: linear-gradient(180deg, #ffd700, #b8860b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.m04 .gline { width: 30px; height: 1px; margin: 2px auto 0; background: linear-gradient(90deg, transparent, #ffd700, transparent); }
+.m04 .sub-band { display: flex; align-items: stretch; gap: 0; text-align: left; }
+.m04 .ctag { background: linear-gradient(180deg, #ffd700, #b8860b); border-radius: 3px 0 0 3px; padding: 2% 2.5%; display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 15%; }
+.m04 .ctag .cv { font-size: 7px; font-weight: 800; color: #000; }
+.m04 .ctag .cl { font-size: 4px; color: rgba(0,0,0,0.6); }
+.m04 .sub-bg-gold { background: rgba(0,0,0,0.8); border-radius: 0 3px 3px 0; padding: 2% 3%; display: flex; align-items: center; flex: 1; }
+.m04 .rhl { position: absolute; right: 14%; top: 55%; z-index: 50; font-size: 12px; animation: flicker04 0.8s ease-in-out infinite alternate; filter: drop-shadow(0 0 4px rgba(255,215,0,0.6)); }
+@keyframes flicker04 { 0%{transform:scale(1) rotate(-3deg)} 100%{transform:scale(1.1) rotate(3deg)} }
+
+/* 05 - Dark Minimal */
+.m05 { background: #0f0f0f; }
+.m05 .top { position: absolute; top: 7.8%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m05 .btc { font-size: 7px; font-weight: 400; letter-spacing: 6px; color: rgba(255,255,255,0.2); }
+.m05 .chg { position: absolute; bottom: 12.5%; left: 4%; z-index: 50; }
+.m05 .chg .p { font-size: 10px; font-weight: 200; color: rgba(255,255,255,0.8); }
+.m05 .chg .c { font-size: 6px; font-weight: 600; color: #4ade80; margin-top: 1px; }
+.m05 .rhl { position: absolute; right: 16%; top: 57%; z-index: 50; width: 5px; height: 5px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80, 0 0 16px rgba(74,222,128,0.4); animation: dp05 1.5s ease-in-out infinite; }
+@keyframes dp05 { 0%,100%{box-shadow:0 0 8px #4ade80} 50%{box-shadow:0 0 16px #4ade80,0 0 30px rgba(74,222,128,0.6)} }
+.m05 .sub-bg-default { background: rgba(255,255,255,0.05); }
+.m05 .sub-text { color: rgba(255,255,255,0.85); font-weight: 300; }
+
+/* 06 - Purple Neon */
+.m06 { background: radial-gradient(ellipse at 30% 70%, #1a0a2e, #0a0515); }
+.m06 .top { position: absolute; top: 7.2%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m06 .btc { font-size: 13px; font-weight: 900; letter-spacing: 3px; color: transparent; -webkit-text-stroke: 1px #a855f7; text-shadow: 0 0 15px rgba(168,85,247,0.3); }
+.m06 .card-bl { position: absolute; bottom: 13%; left: 3%; z-index: 50; background: rgba(168,85,247,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(168,85,247,0.3); border-radius: 6px; padding: 2.5% 3.5%; }
+.m06 .card-bl .p { font-size: 8px; font-weight: 700; color: #e9d5ff; }
+.m06 .card-bl .row { display: flex; align-items: center; gap: 3px; margin-top: 2px; }
+.m06 .card-bl .c { font-size: 7px; font-weight: 600; color: #a855f7; }
+.m06 .card-bl .l { font-size: 5px; color: rgba(255,255,255,0.3); }
+.m06 .rhl { position: absolute; right: 14%; top: 55%; z-index: 50; display: flex; align-items: center; gap: 2px; animation: ab06 1s ease-in-out infinite; }
+.m06 .rhl .at { font-size: 4px; color: #a855f7; font-weight: 600; }
+.m06 .rhl .ai { font-size: 9px; color: #a855f7; filter: drop-shadow(0 0 4px rgba(168,85,247,0.6)); }
+@keyframes ab06 { 0%,100%{transform:translateX(0)} 50%{transform:translateX(2px)} }
+.m06 .sub-bg-default { box-shadow: 0 0 12px rgba(168,85,247,0.1); border-radius: 4px; }
+
+/* 07 - Orange Bold */
+.m07 { background: linear-gradient(180deg, #120d05, #1a1308, #120d05); }
+.m07 .top { position: absolute; top: 6.5%; left: 0; right: 0; z-index: 50; text-align: center; background: linear-gradient(90deg, transparent, rgba(247,147,26,0.15), transparent); padding: 1% 0; }
+.m07 .btc { font-size: 18px; font-weight: 900; letter-spacing: 1px; color: #f7931a; text-shadow: 0 2px 8px rgba(247,147,26,0.4); }
+.m07 .ltk { position: absolute; left: 2%; top: 35%; z-index: 50; display: flex; flex-direction: column; gap: 2px; align-items: center; }
+.m07 .ltk .tp { writing-mode: vertical-rl; font-size: 6px; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
+.m07 .ltk .td { width: 1px; height: 10px; background: rgba(247,147,26,0.4); }
+.m07 .ltk .tc { writing-mode: vertical-rl; font-size: 7px; font-weight: 700; color: #f7931a; }
+.m07 .rhl { position: absolute; right: 14%; top: 55%; z-index: 50; width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg, #f7931a, #e2750a); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(247,147,26,0.5); animation: rg07 3s linear infinite; }
+.m07 .rhl span { font-size: 9px; font-weight: 900; color: #fff; }
+@keyframes rg07 { 0%{box-shadow:0 0 10px rgba(247,147,26,0.5)} 50%{box-shadow:0 0 18px rgba(247,147,26,0.8)} 100%{box-shadow:0 0 10px rgba(247,147,26,0.5)} }
+.m07 .sub-bg-default { border-bottom: 1px solid #f7931a; }
+
+/* 08 - Matrix Green */
+.m08 { background: #050a05; font-family: 'Courier New', monospace; }
+.m08 .top { position: absolute; top: 7.2%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m08 .btc { font-size: 10px; font-weight: 700; letter-spacing: 5px; color: #00ff41; text-shadow: 0 0 8px rgba(0,255,65,0.5); animation: flk08 4s linear infinite; }
+@keyframes flk08 { 0%,95%,100%{opacity:1} 96%{opacity:0.6} }
+.m08 .term { position: absolute; bottom: 12.5%; left: 3%; z-index: 50; background: rgba(0,255,65,0.05); border: 1px solid rgba(0,255,65,0.2); padding: 2% 3%; font-size: 5px; color: #00ff41; border-radius: 1px; }
+.m08 .term div { margin: 1px 0; }
+.m08 .cur { animation: blink08 1s step-end infinite; }
+@keyframes blink08 { 50%{opacity:0} }
+.m08 .rhl { position: absolute; right: 14%; top: 50%; z-index: 50; width: 2px; height: 40px; transform: translateY(-50%); background: linear-gradient(180deg, transparent, #00ff41, transparent); animation: scan08 2s ease-in-out infinite; border-radius: 1px; }
+@keyframes scan08 { 0%,100%{top:50%;height:40px} 50%{top:55%;height:30px} }
+.m08 .sub-bg-default { background: rgba(0,0,0,0.85); border: 1px solid rgba(0,255,65,0.15); }
+.m08 .sub-text { color: #b0ffb0; font-family: 'Segoe UI', sans-serif; }
+
+/* 09 - Red Alert */
+.m09 { background: radial-gradient(ellipse at 50% 80%, #1a0a0a, #0d0505); }
+.m09 .top { position: absolute; top: 6.8%; left: 4%; right: 4%; z-index: 50; display: flex; align-items: center; gap: 4px; }
+.m09 .hline { flex: 1; height: 1px; background: rgba(239,68,68,0.4); }
+.m09 .btc { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: #ef4444; }
+.m09 .badge { position: absolute; bottom: 13%; left: 3%; z-index: 50; display: flex; align-items: center; gap: 4px; }
+.m09 .bi { width: 2px; height: 20px; border-radius: 1px; background: linear-gradient(180deg, #22c55e, #16a34a); }
+.m09 .bc .p { font-size: 9px; font-weight: 700; color: #fff; }
+.m09 .bc .c { font-size: 6px; font-weight: 600; color: #22c55e; }
+.m09 .rhl { position: absolute; right: 14%; top: 56%; z-index: 50; width: 20px; height: 20px; }
+.m09 .ring { position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(239,68,68,0.5); animation: rp09 2s ease-in-out infinite; }
+.m09 .ring:nth-child(2) { inset: -3px; border-color: rgba(239,68,68,0.2); animation-delay: 0.3s; }
+.m09 .rc { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 4px; height: 4px; border-radius: 50%; background: #ef4444; }
+@keyframes rp09 { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.15);opacity:0.5} }
+.m09 .sub-bg-default { border-top: 1px solid rgba(239,68,68,0.6); }
+.m09 .sub-text { color: #fecaca; }
+
+/* 10 - Warm Amber */
+.m10 { background: linear-gradient(180deg, #0e0b05, #161005, #0e0b05); }
+.m10 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m10 .btc { font-size: 12px; font-weight: 400; letter-spacing: 4px; color: #fbbf24; font-family: Georgia, serif; text-shadow: 0 0 10px rgba(251,191,36,0.3); }
+.m10 .ticker { position: absolute; bottom: 13.7%; left: 0; right: 16%; z-index: 50; background: rgba(251,191,36,0.08); border-top: 1px solid rgba(251,191,36,0.3); border-bottom: 1px solid rgba(251,191,36,0.3); padding: 1.5% 3.5%; display: flex; justify-content: space-between; }
+.m10 .ti { font-size: 6px; color: rgba(255,255,255,0.6); }
+.m10 .ti .hl { color: #fbbf24; font-weight: 700; }
+.m10 .ti .gr { color: #22c55e; font-weight: 700; }
+.m10 .rhl { position: absolute; right: 15%; top: 53%; z-index: 50; display: flex; flex-direction: column; align-items: center; }
+.m10 .arrow { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 8px solid #fbbf24; filter: drop-shadow(0 0 4px rgba(251,191,36,0.6)); animation: fu10 1.5s ease-in-out infinite; }
+.m10 .trail { width: 2px; height: 10px; background: linear-gradient(180deg, #fbbf24, transparent); margin-top: -1px; border-radius: 1px; }
+@keyframes fu10 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+.m10 .sub-text { color: #fef3c7; }
+
+/* 11 - Ice Blue */
+.m11 { background: linear-gradient(135deg, #050b14, #0a1628, #050b14); }
+.m11 .top { position: absolute; top: 7.2%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m11 .btc { font-size: 11px; font-weight: 800; letter-spacing: 5px; color: #93c5fd; text-shadow: 0 0 15px rgba(147,197,253,0.4); }
+.m11 .bsub { font-size: 4px; letter-spacing: 2px; color: rgba(147,197,253,0.3); margin-top: 1px; }
+.m11 .glass { position: absolute; bottom: 12.8%; left: 3%; z-index: 50; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 3% 4%; }
+.m11 .gl { font-size: 5px; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
+.m11 .gp { font-size: 9px; font-weight: 300; color: #dbeafe; margin-top: 1px; }
+.m11 .gc { font-size: 7px; font-weight: 600; color: #22c55e; margin-top: 2px; }
+.m11 .rhl { position: absolute; right: 14%; top: 56%; z-index: 50; width: 14px; height: 14px; background: linear-gradient(135deg, #3b82f6, #60a5fa); transform: rotate(45deg); box-shadow: 0 0 10px rgba(59,130,246,0.5); animation: ds11 4s ease-in-out infinite; }
+@keyframes ds11 { 0%,100%{transform:rotate(45deg) scale(1)} 50%{transform:rotate(45deg) scale(1.1); box-shadow: 0 0 16px rgba(59,130,246,0.8)} }
+.m11 .sub-bg-default { background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
+.m11 .sub-text { color: #e0e7ff; }
+
+/* 12 - Gradient Sunset */
+.m12 { background: linear-gradient(180deg, #0d060d, #150a18, #0d060d); }
+.m12 .top { position: absolute; top: 7.2%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m12 .btc { font-size: 15px; font-weight: 900; letter-spacing: 2px; background: linear-gradient(90deg, #f97316, #ec4899, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.m12 .lbar { position: absolute; left: 0; top: 30%; bottom: 40%; z-index: 50; width: 3px; background: linear-gradient(180deg, #f97316, #ec4899, #8b5cf6); border-radius: 0 2px 2px 0; }
+.m12 .ldata { position: absolute; left: 3.5%; top: 38%; z-index: 50; }
+.m12 .ldata .p { font-size: 7px; font-weight: 600; color: rgba(255,255,255,0.7); }
+.m12 .ldata .c { font-size: 9px; font-weight: 800; background: linear-gradient(90deg, #f97316, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.m12 .ldata .l { font-size: 4px; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+.m12 .rhl { position: absolute; right: 14%; top: 55%; z-index: 50; width: 19px; height: 19px; border-radius: 50%; background: conic-gradient(#f97316, #ec4899, #8b5cf6, #f97316); padding: 2px; animation: spin12 6s linear infinite; }
+.m12 .ri { width: 100%; height: 100%; border-radius: 50%; background: #0d060d; display: flex; align-items: center; justify-content: center; font-size: 7px; }
+@keyframes spin12 { to { transform: rotate(360deg); } }
+.m12 .sub-bg-default { border-left: 2px solid; border-image: linear-gradient(180deg, #f97316, #ec4899) 1; }
+.m12 .sub-text { color: #fce7f3; }
+
+/* 13 - Clean White */
+.m13 { background: #181818; }
+.m13 .top { position: absolute; top: 7.8%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m13 .btc { font-size: 10px; font-weight: 600; letter-spacing: 6px; color: rgba(255,255,255,0.9); }
+.m13 .bbar { position: absolute; bottom: 11%; left: 0; right: 0; z-index: 50; background: rgba(255,255,255,0.08); padding: 2.5% 4%; display: flex; justify-content: space-between; align-items: center; }
+.m13 .bl { display: flex; align-items: center; gap: 4px; }
+.m13 .bdot { width: 4px; height: 4px; border-radius: 50%; background: #22c55e; }
+.m13 .bp { font-size: 8px; font-weight: 700; color: #fff; }
+.m13 .bc { background: rgba(34,197,94,0.15); border-radius: 2px; padding: 1px 4px; font-size: 6px; font-weight: 600; color: #22c55e; }
+.m13 .bt { font-size: 5px; color: rgba(255,255,255,0.3); }
+.m13 .rhl { position: absolute; right: 14.5%; top: 53%; z-index: 50; width: 1px; height: 30px; background: linear-gradient(180deg, transparent, #fff, transparent); opacity: 0.4; }
+.m13 .rdot { position: absolute; right: 14%; top: 57%; z-index: 50; width: 3px; height: 3px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px rgba(255,255,255,0.5); animation: bk13 2s ease-in-out infinite; }
+@keyframes bk13 { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* 14 - Teal Data */
+.m14 { background: radial-gradient(ellipse at 50% 50%, #0a1818, #060f0f); }
+.m14 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m14 .btc { font-size: 10px; font-weight: 900; letter-spacing: 4px; color: #14b8a6; text-shadow: 0 0 6px rgba(20,184,166,0.4); }
+.m14 .dots { display: flex; gap: 2px; justify-content: center; margin-top: 2px; }
+.m14 .dots span { width: 2px; height: 2px; border-radius: 50%; background: rgba(20,184,166,0.4); }
+.m14 .dpanel { position: absolute; left: 2%; top: 28%; z-index: 50; background: rgba(20,184,166,0.06); border: 1px solid rgba(20,184,166,0.15); border-radius: 5px; padding: 2.5%; width: 28%; }
+.m14 .dr { display: flex; justify-content: space-between; padding: 1.5px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.m14 .dr:last-child { border-bottom: none; }
+.m14 .dl { font-size: 4px; color: rgba(255,255,255,0.35); }
+.m14 .dv { font-size: 5px; font-weight: 600; color: #5eead4; }
+.m14 .dv.g { color: #22c55e; }
+.m14 .dv.big { font-size: 7px; font-weight: 700; }
+.m14 .rhl { position: absolute; right: 14%; top: 55%; z-index: 50; }
+.m14 .hex { width: 18px; height: 18px; background: rgba(20,184,166,0.3); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; align-items: center; justify-content: center; animation: hp14 2s ease-in-out infinite; }
+.m14 .hex span { font-size: 7px; color: #14b8a6; font-weight: 900; }
+@keyframes hp14 { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+.m14 .sub-text { color: #ccfbf1; }
+
+/* 15 - Neon Pink */
+.m15 { background: linear-gradient(180deg, #0a030a, #120812, #0a030a); }
+.m15 .top { position: absolute; top: 7.2%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m15 .btc { font-size: 14px; font-weight: 900; letter-spacing: 2px; color: #ec4899; text-shadow: 2px 0 #06b6d4, -2px 0 #f97316; animation: gl15 3s ease-in-out infinite; }
+@keyframes gl15 { 0%,90%,100%{text-shadow:2px 0 #06b6d4,-2px 0 #f97316} 92%{text-shadow:-2px 2px #06b6d4,2px -2px #f97316} 94%{text-shadow:2px 0 #06b6d4,-2px 0 #f97316} 96%{text-shadow:-1px -1px #06b6d4,1px 1px #f97316} }
+.m15 .nbox { position: absolute; bottom: 13%; left: 3.5%; z-index: 50; padding: 2% 4%; border: 1px solid #ec4899; box-shadow: 0 0 8px rgba(236,72,153,0.4), inset 0 0 8px rgba(236,72,153,0.1); }
+.m15 .nbox .p { font-size: 8px; font-weight: 300; color: #fce7f3; }
+.m15 .nbox .v { font-size: 9px; font-weight: 800; color: #ec4899; }
+.m15 .nbox .l { font-size: 4px; color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-top: 1px; }
+.m15 .rhl { position: absolute; right: 15%; top: 52%; z-index: 50; display: flex; flex-direction: column; gap: 3px; align-items: center; }
+.m15 .sd { border-radius: 50%; background: #ec4899; box-shadow: 0 0 6px rgba(236,72,153,0.6); }
+.m15 .sd:nth-child(1) { width: 3px; height: 3px; opacity: 0.3; }
+.m15 .sd:nth-child(2) { width: 4px; height: 4px; opacity: 0.5; }
+.m15 .sd:nth-child(3) { width: 4px; height: 4px; opacity: 0.7; }
+.m15 .sd:nth-child(4) { width: 5px; height: 5px; opacity: 1; animation: sd15 1.5s ease-in-out infinite; }
+@keyframes sd15 { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+.m15 .sub-bg-default { border-bottom: 1px solid #ec4899; box-shadow: 0 1px 6px rgba(236,72,153,0.2); }
+.m15 .sub-text { color: #fce7f3; }
+
+/* 16 - Electric Orange Pro */
+.m16 { background: linear-gradient(180deg, #0a0804, #14100a, #0a0804); }
+.m16 .ctl, .m16 .cbr { position: absolute; z-index: 40; width: 15px; height: 15px; }
+.m16 .ctl { top: 6.5%; left: 2%; border-top: 1px solid rgba(251,146,60,0.3); border-left: 1px solid rgba(251,146,60,0.3); }
+.m16 .cbr { bottom: 10%; right: 15.5%; border-bottom: 1px solid rgba(251,146,60,0.3); border-right: 1px solid rgba(251,146,60,0.3); }
+.m16 .top { position: absolute; top: 7.2%; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.m16 .bw { font-size: 8px; font-weight: 700; letter-spacing: 3px; color: rgba(255,255,255,0.5); }
+.m16 .bic { width: 14px; height: 14px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #fb923c); display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 900; color: #fff; box-shadow: 0 0 8px rgba(249,115,22,0.5); }
+.m16 .ld { position: absolute; left: 3%; bottom: 15.5%; z-index: 50; }
+.m16 .ld .pr { display: flex; align-items: baseline; gap: 3px; }
+.m16 .ld .p { font-size: 11px; font-weight: 200; color: #fff; }
+.m16 .ld .cp { background: rgba(34,197,94,0.2); border: 1px solid rgba(34,197,94,0.4); border-radius: 6px; padding: 0 4px; font-size: 6px; font-weight: 700; color: #4ade80; }
+.m16 .ld .sl { font-size: 4px; color: rgba(255,255,255,0.25); letter-spacing: 1px; margin-top: 1px; }
+.m16 .rhl { position: absolute; right: 14%; top: 55%; z-index: 50; }
+.m16 .ptag { background: linear-gradient(135deg, #f97316, #ea580c); border-radius: 2px 2px 2px 0; padding: 1.5% 2.5%; box-shadow: 0 0 8px rgba(249,115,22,0.4); animation: tb16 2s ease-in-out infinite; position: relative; }
+.m16 .ptag::after { content: ''; position: absolute; bottom: -3px; left: 0; border-left: 3px solid #ea580c; border-bottom: 3px solid transparent; }
+.m16 .ptag span { font-size: 4px; font-weight: 800; color: #fff; white-space: nowrap; }
+@keyframes tb16 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+.m16 .sub-bg-default { border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+<h1>HUD OVERLAY 시안 갤러리</h1>
+<div class="desc">상단: BITCOIN 중앙 배치 | 24H 등락: 다양한 위치 | 우측 하이라이트: 좋아요 근처 | 회색 = 유튜브 UI 가림 영역</div>
+
+<div class="grid">
+
+<!-- 01 Classic Orange -->
+<div class="card">
+  <div class="card-label"><strong>#01</strong> Classic Orange — 좌하단 뱃지 / 글로우 닷</div>
+  <div class="phone m01">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="chg"><div class="chg-lbl">24h Change</div><div class="chg-val">+1.22%</div></div>
+    <div class="rhl"><span>$71.5K</span></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 02 Neon Cyan -->
+<div class="card">
+  <div class="card-label"><strong>#02</strong> Neon Cyan — 좌측 세로 스트립 / 번개</div>
+  <div class="phone m02">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="strip"><span class="v">+1.22%</span><span class="l">24H</span></div>
+    <div class="rhl">&#9889;</div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 03 Green Minimal -->
+<div class="card">
+  <div class="card-label"><strong>#03</strong> Green Minimal — 필 뱃지 / 미니 차트</div>
+  <div class="phone m03">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="pill"><span>&#9650;</span><span>+1.22%</span></div>
+    <div class="rhl"><div class="mini-chart"><div class="bar" style="height:4px;opacity:0.4"></div><div class="bar" style="height:6px;opacity:0.5"></div><div class="bar" style="height:5px;opacity:0.6"></div><div class="bar" style="height:8px;opacity:0.7"></div><div class="bar" style="height:7px;opacity:0.8"></div><div class="bar" style="height:10px;opacity:0.9"></div><div class="bar" style="height:12px;opacity:1"></div></div><div class="mp">$71,573</div></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 04 Gold Luxe -->
+<div class="card">
+  <div class="card-label"><strong>#04</strong> Gold Luxe — 자막밴드 통합 / 불꽃</div>
+  <div class="phone m04">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div><div class="gline"></div></div>
+    <div class="rhl">&#128293;</div>
+    <div class="sub-band"><div class="ctag"><div class="cv">+1.22%</div><div class="cl">24h</div></div><div class="sub-bg-gold"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 05 Dark Minimal -->
+<div class="card">
+  <div class="card-label"><strong>#05</strong> Dark Minimal — 플레인 텍스트 / 펄스 닷</div>
+  <div class="phone m05">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="chg"><div class="p">$71,573</div><div class="c">+1.22%</div></div>
+    <div class="rhl"></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 06 Purple Neon -->
+<div class="card">
+  <div class="card-label"><strong>#06</strong> Purple Neon — 글래스 카드 / 화살표</div>
+  <div class="phone m06">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="card-bl"><div class="p">$71,573</div><div class="row"><span class="c">+1.22%</span><span class="l">24H</span></div></div>
+    <div class="rhl"><span class="at">LIKE</span><span class="ai">&#10148;</span></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 07 Orange Bold -->
+<div class="card">
+  <div class="card-label"><strong>#07</strong> Orange Bold — 좌측 세로 티커 / BTC 뱃지</div>
+  <div class="phone m07">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="ltk"><div class="tp">$71,573</div><div class="td"></div><div class="tc">+1.22%</div></div>
+    <div class="rhl"><span>&#8383;</span></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 08 Matrix Green -->
+<div class="card">
+  <div class="card-label"><strong>#08</strong> Matrix Green — 터미널 / 스캔 라인</div>
+  <div class="phone m08">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="term"><div>&gt; BTC/USD: $71,573</div><div>&gt; 24H: +1.22%</div><div>&gt; STATUS: BULLISH<span class="cur">_</span></div></div>
+    <div class="rhl"></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 09 Red Alert -->
+<div class="card">
+  <div class="card-label"><strong>#09</strong> Red Alert — 인디케이터 뱃지 / 더블 링</div>
+  <div class="phone m09">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="hline"></div><div class="btc">BITCOIN</div><div class="hline"></div></div>
+    <div class="badge"><div class="bi"></div><div class="bc"><div class="p">$71,573</div><div class="c">+1.22% 24h</div></div></div>
+    <div class="rhl"><div class="ring"></div><div class="ring"></div><div class="rc"></div></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 10 Warm Amber -->
+<div class="card">
+  <div class="card-label"><strong>#10</strong> Warm Amber — 티커 스트립 / 상승 화살표</div>
+  <div class="phone m10">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="ticker"><div class="ti">BTC <span class="hl">$71,573</span></div><div class="ti">24H <span class="gr">+1.22%</span></div><div class="ti">VOL <span class="hl">$28.4B</span></div></div>
+    <div class="rhl"><div class="arrow"></div><div class="trail"></div></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 11 Ice Blue -->
+<div class="card">
+  <div class="card-label"><strong>#11</strong> Ice Blue — 글래스 카드 / 다이아몬드</div>
+  <div class="phone m11">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div><div class="bsub">DAILY BRIEFING</div></div>
+    <div class="glass"><div class="gl">BTC / USD</div><div class="gp">$71,573</div><div class="gc">+1.22%</div></div>
+    <div class="rhl"></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 12 Gradient Sunset -->
+<div class="card">
+  <div class="card-label"><strong>#12</strong> Gradient Sunset — 좌측 바+데이터 / 스피닝 링</div>
+  <div class="phone m12">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="lbar"></div>
+    <div class="ldata"><div class="p">$71,573</div><div class="c">+1.22%</div><div class="l">24H CHANGE</div></div>
+    <div class="rhl"><div class="ri">&#9650;</div></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 13 Clean White -->
+<div class="card">
+  <div class="card-label"><strong>#13</strong> Clean White — 하단 인포바 / 블링크 닷</div>
+  <div class="phone m13">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="bbar"><div class="bl"><div class="bdot"></div><div class="bp">$71,573</div></div><div class="bc">+1.22%</div><div class="bt">LIVE</div></div>
+    <div class="rhl"></div><div class="rdot"></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 14 Teal Data -->
+<div class="card">
+  <div class="card-label"><strong>#14</strong> Teal Data — 좌측 데이터 패널 / 헥사곤</div>
+  <div class="phone m14">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div><div class="dots"><span></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="dpanel"><div class="dr"><span class="dl">PRICE</span><span class="dv big">$71,573</span></div><div class="dr"><span class="dl">24H</span><span class="dv g">+1.22%</span></div><div class="dr"><span class="dl">HIGH</span><span class="dv">$72,140</span></div><div class="dr"><span class="dl">LOW</span><span class="dv">$70,280</span></div><div class="dr"><span class="dl">VOL</span><span class="dv">$28.4B</span></div></div>
+    <div class="rhl"><div class="hex"><span>&#8383;</span></div></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 15 Neon Pink -->
+<div class="card">
+  <div class="card-label"><strong>#15</strong> Neon Pink — 네온 박스 / 상승 도트</div>
+  <div class="phone m15">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="nbox"><div class="p">$71,573</div><div class="v">+1.22%</div><div class="l">24H CHANGE</div></div>
+    <div class="rhl"><div class="sd"></div><div class="sd"></div><div class="sd"></div><div class="sd"></div></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+<!-- 16 Electric Orange Pro -->
+<div class="card">
+  <div class="card-label"><strong>#16</strong> Electric Orange Pro — L-Shape / 프라이스 태그</div>
+  <div class="phone m16">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div><div><div class="yt-btn"></div><div class="yt-bl"></div></div></div>
+    <div class="ctl"></div><div class="cbr"></div>
+    <div class="top"><span class="bw">BIT</span><div class="bic">&#8383;</div><span class="bw">COIN</span></div>
+    <div class="ld"><div class="pr"><span class="p">$71,573</span><span class="cp">+1.22%</span></div><div class="sl">24H CHANGE</div></div>
+    <div class="rhl"><div class="ptag"><span>$71.5K</span></div></div>
+    <div class="sub-band"><div class="sub-bg-default"><div class="sub-text">Bitcoin surges past $71K as institutional demand grows...</div></div></div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

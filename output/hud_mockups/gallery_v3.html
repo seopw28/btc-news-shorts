@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUD v3 — 좌측 데이터 패널 16종</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; }
+h1 { text-align: center; color: #f7931a; margin-bottom: 6px; font-size: 22px; }
+.desc { text-align: center; color: #888; font-size: 11px; margin-bottom: 20px; line-height: 1.6; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 1600px; margin: 0 auto; }
+@media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 800px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+.card { background: #161616; border-radius: 10px; overflow: hidden; border: 1px solid #222; transition: border-color 0.2s; }
+.card:hover { border-color: #f7931a; }
+.card-label { padding: 6px 10px; font-size: 10px; color: #aaa; background: #111; border-bottom: 1px solid #222; line-height: 1.4; }
+.card-label strong { color: #f7931a; font-size: 11px; }
+.phone { width: 100%; aspect-ratio: 9/16; position: relative; overflow: hidden; }
+
+/* === YT UI === */
+.yt-top { position: absolute; top: 0; left: 0; right: 0; height: 6.2%; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.04); z-index: 100; display: flex; align-items: center; padding: 0 3%; font-size: 4px; color: rgba(255,255,255,0.2); }
+.yt-right { position: absolute; right: 1%; top: 58%; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 2.5%; }
+.yt-bw { display: flex; flex-direction: column; align-items: center; }
+.yt-b { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.yt-l { width: 14px; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.06); margin-top: 2px; }
+.yt-ch { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); margin-top: 2px; }
+/* YT bottom bar */
+.yt-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 7%; background: rgba(255,255,255,0.04); z-index: 100; display: flex; align-items: center; padding: 0 3%; }
+.yt-bottom-text { font-size: 4px; color: rgba(255,255,255,0.15); }
+.yt-bottom-sub { position: absolute; bottom: 7.5%; left: 3%; z-index: 100; display: flex; align-items: center; gap: 2%; }
+.yt-bottom-sub .ch-icon { width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,0.12); }
+.yt-bottom-sub .ch-name { font-size: 5px; color: rgba(255,255,255,0.35); }
+
+/* === Subtitle: 48% height, full width === */
+.sub { position: absolute; top: 46%; left: 0; right: 0; z-index: 50; text-align: center; padding: 0 3%; transform: translateY(-50%); }
+.sub-inner { background: rgba(0,0,0,0.65); border-radius: 4px; padding: 2.5% 4%; display: inline-block; max-width: 96%; }
+.sub-t { font-size: 7px; color: #fff; font-weight: 500; line-height: 1.5; }
+
+/* ============================================ */
+/*  16 MOCKUPS — LEFT data panel               */
+/* ============================================ */
+
+/* --- 01: Orange Table --- */
+.m01 { background: linear-gradient(180deg, #0d1117, #161b22 40%, #0d1117); }
+.m01 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m01 .btc { font-size: 16px; font-weight: 900; letter-spacing: 4px; color: #f7931a; text-shadow: 0 0 15px rgba(247,147,26,0.4); }
+.m01 .dp {
+  position: absolute; left: 2.5%; top: 57%; z-index: 50;
+  background: rgba(10,14,27,0.92); border: 1px solid rgba(247,147,26,0.25);
+  border-radius: 6px; padding: 2.5% 3%; width: 34%;
+}
+.m01 .dp-title { font-size: 4px; color: #f7931a; letter-spacing: 2px; text-align: center; font-weight: 700; margin-bottom: 3px; }
+.m01 .dp-r { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px solid rgba(247,147,26,0.06); }
+.m01 .dp-r:last-child { border-bottom: none; }
+.m01 .dp-k { font-size: 4px; color: rgba(255,255,255,0.4); }
+.m01 .dp-v { font-size: 5px; font-weight: 600; color: #fdba74; }
+.m01 .dp-v.w { color: #fff; font-size: 6px; font-weight: 700; }
+.m01 .dp-v.g { color: #22c55e; }
+.m01 .sub-inner { border-left: 2px solid #f7931a; }
+
+/* --- 02: Orange Card Stack --- */
+.m02 { background: linear-gradient(180deg, #100a03, #1a1308, #100a03); }
+.m02 .top { position: absolute; top: 6.5%; left: 0; right: 0; text-align: center; z-index: 50; background: linear-gradient(90deg, transparent, rgba(247,147,26,0.1), transparent); padding: 1.2% 0; }
+.m02 .btc { font-size: 20px; font-weight: 900; color: #f7931a; text-shadow: 0 2px 8px rgba(247,147,26,0.4); letter-spacing: 1px; }
+.m02 .dp {
+  position: absolute; left: 2%; top: 56%; z-index: 50;
+  width: 33%; display: flex; flex-direction: column; gap: 2px;
+}
+.m02 .dp-c { background: rgba(247,147,26,0.06); border: 1px solid rgba(247,147,26,0.12); border-radius: 4px; padding: 3% 6%; display: flex; justify-content: space-between; align-items: center; }
+.m02 .dp-c.hero { background: rgba(247,147,26,0.12); border-color: rgba(247,147,26,0.25); }
+.m02 .dp-c .k { font-size: 4px; color: rgba(255,255,255,0.35); }
+.m02 .dp-c .v { font-size: 5px; font-weight: 700; color: #fdba74; }
+.m02 .dp-c .v.w { color: #fff; font-size: 6px; }
+.m02 .dp-c .v.g { color: #22c55e; }
+.m02 .sub-inner { border-bottom: 2px solid #f7931a; background: rgba(0,0,0,0.7); }
+
+/* --- 03: Cyan Terminal --- */
+.m03 { background: linear-gradient(135deg, #070b14, #0c1222, #070b14); }
+.m03 .top { position: absolute; top: 8%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m03 .btc { font-size: 12px; font-weight: 300; letter-spacing: 8px; color: #06b6d4; text-shadow: 0 0 25px rgba(6,182,212,0.5); }
+.m03 .dp {
+  position: absolute; left: 2%; top: 57%; z-index: 50;
+  background: rgba(6,182,212,0.04); border: 1px solid rgba(6,182,212,0.2);
+  border-radius: 2px; padding: 2.5% 3%; width: 36%; font-family: 'Courier New', monospace;
+}
+.m03 .dp-hd { font-size: 4px; color: rgba(6,182,212,0.5); letter-spacing: 2px; border-bottom: 1px solid rgba(6,182,212,0.1); padding-bottom: 2px; margin-bottom: 2px; }
+.m03 .dp-ln { font-size: 4.5px; color: #22d3ee; margin: 1.5px 0; display: flex; justify-content: space-between; }
+.m03 .dp-ln .dim { color: rgba(6,182,212,0.4); }
+.m03 .dp-st { margin-top: 3px; padding-top: 2px; border-top: 1px solid rgba(6,182,212,0.1); font-size: 4px; color: #06b6d4; }
+.m03 .cur { animation: bk 1s step-end infinite; }
+@keyframes bk { 50% { opacity: 0; } }
+.m03 .sub-inner { border-left: 2px solid #06b6d4; background: rgba(0,0,0,0.7); }
+.m03 .sub-t { color: #e2e8f0; }
+
+/* --- 04: Cyan 2x2 Grid --- */
+.m04 { background: radial-gradient(ellipse at 40% 60%, #0c1628, #070b14); }
+.m04 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m04 .btc { font-size: 14px; font-weight: 700; letter-spacing: 6px; color: #22d3ee; text-shadow: 0 0 20px rgba(34,211,238,0.3); }
+.m04 .dp {
+  position: absolute; left: 2%; top: 56%; z-index: 50;
+  width: 34%; background: rgba(6,182,212,0.05); backdrop-filter: blur(8px);
+  border: 1px solid rgba(6,182,212,0.12); border-radius: 8px; padding: 3%;
+}
+.m04 .dp-price { text-align: center; font-size: 8px; font-weight: 300; color: #cffafe; margin-bottom: 1px; }
+.m04 .dp-chg { text-align: center; font-size: 6px; font-weight: 700; color: #22c55e; margin-bottom: 4px; }
+.m04 .dp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.m04 .dp-cell { background: rgba(6,182,212,0.06); border-radius: 3px; padding: 2.5px 3px; text-align: center; }
+.m04 .dp-cell .k { font-size: 3.5px; color: rgba(255,255,255,0.3); }
+.m04 .dp-cell .v { font-size: 5px; font-weight: 600; color: #67e8f9; }
+.m04 .sub-inner { border-radius: 6px; background: rgba(0,0,0,0.6); border: 1px solid rgba(6,182,212,0.06); }
+
+/* --- 05: Green Minimal Pills --- */
+.m05 { background: #0f0f0f; }
+.m05 .top { position: absolute; top: 8%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m05 .btc { font-size: 10px; font-weight: 600; letter-spacing: 5px; color: rgba(255,255,255,0.25); border-bottom: 1px solid rgba(255,255,255,0.06); display: inline-block; padding-bottom: 2px; }
+.m05 .dp {
+  position: absolute; left: 2.5%; top: 57%; z-index: 50;
+  width: 31%; display: flex; flex-direction: column; gap: 2.5px;
+}
+.m05 .dp-pill { display: flex; justify-content: space-between; align-items: center; padding: 3px 6px; border-radius: 10px; background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.08); }
+.m05 .dp-pill.hero { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.2); }
+.m05 .dp-pill .k { font-size: 4px; color: rgba(255,255,255,0.3); }
+.m05 .dp-pill .v { font-size: 5px; font-weight: 600; color: #4ade80; }
+.m05 .dp-pill .v.w { color: rgba(255,255,255,0.8); }
+.m05 .sub-inner { background: rgba(255,255,255,0.04); }
+.m05 .sub-t { color: rgba(255,255,255,0.8); font-weight: 300; }
+
+/* --- 06: Green List + Indicator --- */
+.m06 { background: linear-gradient(180deg, #080f08, #111a11 40%, #080f08); }
+.m06 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m06 .btc { font-size: 14px; font-weight: 800; letter-spacing: 3px; color: #22c55e; text-shadow: 0 0 12px rgba(34,197,94,0.3); }
+.m06 .dp {
+  position: absolute; left: 2%; top: 56%; z-index: 50;
+  width: 33%; border-left: 2px solid #22c55e; padding-left: 3%;
+}
+.m06 .dp-r { padding: 2px 0; }
+.m06 .dp-k { font-size: 3.5px; color: rgba(34,197,94,0.5); text-transform: uppercase; letter-spacing: 1px; }
+.m06 .dp-v { font-size: 5.5px; font-weight: 700; color: #bbf7d0; }
+.m06 .dp-v.big { font-size: 8px; color: #fff; }
+.m06 .dp-v.g { color: #4ade80; }
+.m06 .dp-bull { margin-top: 3px; padding: 2px 4px; background: rgba(34,197,94,0.12); border-radius: 2px; font-size: 4px; color: #22c55e; font-weight: 700; text-align: center; letter-spacing: 1px; }
+.m06 .sub-inner { background: rgba(0,0,0,0.7); border-top: 2px solid rgba(34,197,94,0.4); }
+.m06 .sub-t { color: #dcfce7; }
+
+/* --- 07: Gold Luxe Table --- */
+.m07 { background: linear-gradient(180deg, #0e0c08, #1a1610, #0e0c08); }
+.m07 .top { position: absolute; top: 7%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m07 .btc { font-size: 18px; font-weight: 900; letter-spacing: 2px; background: linear-gradient(180deg, #ffd700, #b8860b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.m07 .gln { width: 30px; height: 1px; margin: 2px auto; background: linear-gradient(90deg, transparent, #ffd700, transparent); }
+.m07 .dp {
+  position: absolute; left: 2.5%; top: 56%; z-index: 50;
+  background: linear-gradient(180deg, rgba(255,215,0,0.05), rgba(184,134,11,0.02));
+  border: 1px solid rgba(255,215,0,0.15); border-radius: 8px; padding: 3%; width: 34%;
+}
+.m07 .dp-hd { text-align: center; font-size: 5px; font-weight: 800; color: #ffd700; margin-bottom: 3px; letter-spacing: 1px; }
+.m07 .dp-div { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.25), transparent); margin: 2px 0; }
+.m07 .dp-r { display: flex; justify-content: space-between; padding: 1.5px 0; }
+.m07 .dp-k { font-size: 4px; color: rgba(255,215,0,0.45); }
+.m07 .dp-v { font-size: 5px; font-weight: 600; color: #fef3c7; }
+.m07 .dp-v.gold { color: #ffd700; font-weight: 800; font-size: 7px; }
+.m07 .dp-v.g { color: #22c55e; }
+.m07 .sub-inner { background: rgba(0,0,0,0.75); border-bottom: 2px solid #ffd700; }
+.m07 .sub-t { color: #fef3c7; }
+
+/* --- 08: Gold Compact Badge --- */
+.m08 { background: linear-gradient(180deg, #0d0a04, #18140a, #0d0a04); }
+.m08 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m08 .btc { font-size: 13px; font-weight: 400; letter-spacing: 5px; color: #fbbf24; font-family: Georgia, serif; text-shadow: 0 0 10px rgba(251,191,36,0.3); }
+.m08 .dp {
+  position: absolute; left: 2.5%; top: 57%; z-index: 50;
+  width: 32%;
+}
+.m08 .dp-hero { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 6px; padding: 3% 4%; text-align: center; margin-bottom: 3px; }
+.m08 .dp-hero .price { font-size: 10px; font-weight: 300; color: #fef3c7; }
+.m08 .dp-hero .chg-row { display: flex; align-items: center; justify-content: center; gap: 2px; margin-top: 1px; }
+.m08 .dp-hero .arr { font-size: 5px; color: #22c55e; }
+.m08 .dp-hero .pct { font-size: 7px; font-weight: 700; color: #22c55e; }
+.m08 .dp-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.m08 .dp-mini-cell { text-align: center; padding: 2px; background: rgba(251,191,36,0.04); border-radius: 3px; }
+.m08 .dp-mini-cell .k { font-size: 3.5px; color: rgba(251,191,36,0.4); }
+.m08 .dp-mini-cell .v { font-size: 5px; font-weight: 600; color: #fde68a; }
+.m08 .sub-inner { background: rgba(0,0,0,0.7); border-radius: 4px; }
+.m08 .sub-t { color: #fef3c7; }
+
+/* --- 09: Purple Glass --- */
+.m09 { background: radial-gradient(ellipse at 30% 70%, #1a0a2e, #0a0515); }
+.m09 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m09 .btc { font-size: 14px; font-weight: 900; letter-spacing: 3px; color: transparent; -webkit-text-stroke: 1px #a855f7; text-shadow: 0 0 15px rgba(168,85,247,0.3); }
+.m09 .dp {
+  position: absolute; left: 2.5%; top: 56%; z-index: 50;
+  background: rgba(168,85,247,0.06); backdrop-filter: blur(10px);
+  border: 1px solid rgba(168,85,247,0.15); border-radius: 10px; padding: 3%; width: 33%;
+}
+.m09 .dp-icon { text-align: center; font-size: 10px; margin-bottom: 2px; }
+.m09 .dp-price { text-align: center; font-size: 8px; font-weight: 200; color: #e9d5ff; }
+.m09 .dp-chg { text-align: center; font-size: 6px; font-weight: 700; color: #a855f7; margin: 1px 0 3px; }
+.m09 .dp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.m09 .dp-cell { text-align: center; padding: 2px; background: rgba(168,85,247,0.05); border-radius: 3px; }
+.m09 .dp-cell .k { font-size: 3.5px; color: rgba(255,255,255,0.3); }
+.m09 .dp-cell .v { font-size: 5px; font-weight: 600; color: #c4b5fd; }
+.m09 .sub-inner { background: rgba(0,0,0,0.6); border-radius: 6px; box-shadow: 0 0 12px rgba(168,85,247,0.08); }
+.m09 .sub-t { color: #f3e8ff; }
+
+/* --- 10: Purple Neon Box --- */
+.m10 { background: linear-gradient(180deg, #0a0515, #140a25, #0a0515); }
+.m10 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m10 .btc { font-size: 16px; font-weight: 900; letter-spacing: 2px; color: #c084fc; text-shadow: 0 0 20px rgba(192,132,252,0.4); }
+.m10 .dp {
+  position: absolute; left: 2.5%; top: 57%; z-index: 50;
+  width: 32%; border: 1px solid rgba(168,85,247,0.4);
+  box-shadow: 0 0 10px rgba(168,85,247,0.2), inset 0 0 10px rgba(168,85,247,0.05);
+  padding: 3%;
+}
+.m10 .dp-title { font-size: 4px; color: #a855f7; letter-spacing: 2px; text-align: center; margin-bottom: 3px; font-weight: 700; }
+.m10 .dp-price { font-size: 9px; font-weight: 200; color: #fae8ff; text-align: center; }
+.m10 .dp-chg { font-size: 7px; font-weight: 800; color: #c084fc; text-align: center; margin: 1px 0 3px; }
+.m10 .dp-r { display: flex; justify-content: space-between; padding: 1.5px 0; border-top: 1px solid rgba(168,85,247,0.08); }
+.m10 .dp-k { font-size: 4px; color: rgba(255,255,255,0.3); }
+.m10 .dp-v { font-size: 5px; color: #d8b4fe; font-weight: 500; }
+.m10 .sub-inner { border-bottom: 2px solid #a855f7; background: rgba(0,0,0,0.7); box-shadow: 0 2px 8px rgba(168,85,247,0.1); }
+.m10 .sub-t { color: #fae8ff; }
+
+/* --- 11: Red Tactical --- */
+.m11 { background: radial-gradient(ellipse at 50% 80%, #1a0a0a, #0d0505); }
+.m11 .top { position: absolute; top: 7%; left: 4%; right: 4%; z-index: 50; display: flex; align-items: center; gap: 4px; }
+.m11 .hln { flex: 1; height: 1px; background: rgba(239,68,68,0.3); }
+.m11 .btc { font-size: 9px; font-weight: 700; letter-spacing: 3px; color: #ef4444; }
+.m11 .dp {
+  position: absolute; left: 2%; top: 56%; z-index: 50;
+  width: 33%; border-left: 2px solid #ef4444; padding-left: 3%;
+}
+.m11 .dp-r { padding: 2px 0; }
+.m11 .dp-k { font-size: 3.5px; color: rgba(239,68,68,0.5); text-transform: uppercase; letter-spacing: 1px; }
+.m11 .dp-v { font-size: 5.5px; font-weight: 700; color: #fecaca; }
+.m11 .dp-v.big { font-size: 8px; color: #fff; }
+.m11 .dp-v.g { color: #22c55e; }
+.m11 .dp-alert { margin-top: 3px; padding: 2px 4px; background: rgba(239,68,68,0.12); border-radius: 2px; font-size: 4px; color: #ef4444; font-weight: 700; text-align: center; letter-spacing: 1px; animation: ap 2s ease-in-out infinite; }
+@keyframes ap { 0%,100%{opacity:1} 50%{opacity:0.5} }
+.m11 .sub-inner { border-top: 2px solid rgba(239,68,68,0.5); background: rgba(0,0,0,0.75); }
+.m11 .sub-t { color: #fecaca; }
+
+/* --- 12: Red 2x2 Grid --- */
+.m12 { background: linear-gradient(180deg, #0d0505, #1a0a0a, #0d0505); }
+.m12 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m12 .btc { font-size: 16px; font-weight: 900; letter-spacing: 2px; color: #f87171; text-shadow: 0 0 15px rgba(248,113,113,0.3); }
+.m12 .dp {
+  position: absolute; left: 2.5%; top: 56%; z-index: 50;
+  width: 33%; background: rgba(239,68,68,0.04);
+  border: 1px solid rgba(239,68,68,0.12); border-radius: 6px; padding: 3%; overflow: hidden;
+}
+.m12 .dp-accent { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #ef4444; }
+.m12 .dp-price { text-align: center; font-size: 8px; font-weight: 600; color: #fff; margin: 2px 0 1px; }
+.m12 .dp-chg { text-align: center; font-size: 6px; font-weight: 700; color: #22c55e; margin-bottom: 3px; }
+.m12 .dp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.m12 .dp-cell { text-align: center; padding: 2px; background: rgba(239,68,68,0.04); border-radius: 3px; }
+.m12 .dp-cell .k { font-size: 3.5px; color: rgba(255,255,255,0.3); }
+.m12 .dp-cell .v { font-size: 5px; font-weight: 600; color: #fca5a5; }
+.m12 .sub-inner { background: rgba(0,0,0,0.75); border-radius: 4px; }
+.m12 .sub-t { color: #fee2e2; }
+
+/* --- 13: White Clean --- */
+.m13 { background: #181818; }
+.m13 .top { position: absolute; top: 8%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m13 .btc { font-size: 11px; font-weight: 600; letter-spacing: 7px; color: rgba(255,255,255,0.85); }
+.m13 .dp {
+  position: absolute; left: 2.5%; top: 57%; z-index: 50;
+  width: 31%; background: rgba(255,255,255,0.05);
+  border-radius: 6px; padding: 3%;
+}
+.m13 .dp-dot-row { display: flex; align-items: center; gap: 3px; margin-bottom: 2px; }
+.m13 .dp-dot { width: 4px; height: 4px; border-radius: 50%; background: #22c55e; }
+.m13 .dp-live { font-size: 4px; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+.m13 .dp-price { font-size: 9px; font-weight: 700; color: #fff; }
+.m13 .dp-chg-pill { display: inline-block; background: rgba(34,197,94,0.1); border-radius: 3px; padding: 1px 4px; font-size: 5px; font-weight: 600; color: #22c55e; margin: 2px 0 3px; }
+.m13 .dp-r { display: flex; justify-content: space-between; padding: 1.5px 0; border-top: 1px solid rgba(255,255,255,0.03); }
+.m13 .dp-k { font-size: 4px; color: rgba(255,255,255,0.2); }
+.m13 .dp-v { font-size: 4.5px; color: rgba(255,255,255,0.55); font-weight: 500; }
+.m13 .sub-inner { background: rgba(0,0,0,0.8); border-radius: 3px; }
+
+/* --- 14: White Bordered --- */
+.m14 { background: #141414; }
+.m14 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m14 .btc { font-size: 13px; font-weight: 300; letter-spacing: 10px; color: rgba(255,255,255,0.6); }
+.m14 .dp {
+  position: absolute; left: 2.5%; top: 56%; z-index: 50;
+  width: 33%; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 3%;
+  background: rgba(255,255,255,0.02);
+}
+.m14 .dp-price { font-size: 9px; font-weight: 200; color: #fff; text-align: center; }
+.m14 .dp-chg { text-align: center; margin: 2px 0 4px; }
+.m14 .dp-chg span { background: rgba(34,197,94,0.1); border-radius: 4px; padding: 1px 6px; font-size: 6px; font-weight: 600; color: #4ade80; }
+.m14 .dp-r { display: flex; justify-content: space-between; padding: 2px 0; border-top: 1px solid rgba(255,255,255,0.03); }
+.m14 .dp-k { font-size: 4px; color: rgba(255,255,255,0.2); }
+.m14 .dp-v { font-size: 5px; color: rgba(255,255,255,0.5); font-weight: 400; }
+.m14 .sub-inner { background: rgba(0,0,0,0.85); }
+
+/* --- 15: Teal Data Rich --- */
+.m15 { background: radial-gradient(ellipse at 50% 50%, #0a1818, #060f0f); }
+.m15 .top { position: absolute; top: 7.5%; left: 0; right: 0; text-align: center; z-index: 50; }
+.m15 .btc { font-size: 11px; font-weight: 900; letter-spacing: 5px; color: #14b8a6; text-shadow: 0 0 6px rgba(20,184,166,0.4); }
+.m15 .dots { display: flex; gap: 2px; justify-content: center; margin-top: 2px; }
+.m15 .dots span { width: 2px; height: 2px; border-radius: 50%; background: rgba(20,184,166,0.4); }
+.m15 .dp {
+  position: absolute; left: 2%; top: 55%; z-index: 50;
+  width: 35%; background: rgba(20,184,166,0.04);
+  border: 1px solid rgba(20,184,166,0.1); border-radius: 8px; padding: 2.5%;
+}
+.m15 .dp-hex { text-align: center; margin-bottom: 3px; }
+.m15 .dp-hex-s { display: inline-flex; width: 16px; height: 16px; background: rgba(20,184,166,0.2); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); align-items: center; justify-content: center; font-size: 8px; color: #14b8a6; font-weight: 900; }
+.m15 .dp-price { text-align: center; font-size: 8px; font-weight: 700; color: #5eead4; }
+.m15 .dp-chg { text-align: center; font-size: 6px; font-weight: 600; color: #22c55e; margin: 1px 0 3px; }
+.m15 .dp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.m15 .dp-cell { background: rgba(20,184,166,0.04); border-radius: 3px; padding: 2px 3px; text-align: center; }
+.m15 .dp-cell .k { font-size: 3.5px; color: rgba(255,255,255,0.3); }
+.m15 .dp-cell .v { font-size: 5px; font-weight: 600; color: #5eead4; }
+.m15 .sub-inner { background: rgba(0,0,0,0.75); border-radius: 4px; }
+.m15 .sub-t { color: #ccfbf1; }
+
+/* --- 16: BIT⚡COIN Pro --- */
+.m16 { background: linear-gradient(180deg, #0a0804, #14100a, #0a0804); }
+.m16 .ctl,.m16 .cbr { position: absolute; z-index: 40; width: 12px; height: 12px; }
+.m16 .ctl { top: 6.5%; left: 2%; border-top: 1px solid rgba(251,146,60,0.25); border-left: 1px solid rgba(251,146,60,0.25); }
+.m16 .cbr { bottom: 14%; left: 2%; border-bottom: 1px solid rgba(251,146,60,0.25); border-left: 1px solid rgba(251,146,60,0.25); }
+.m16 .top { position: absolute; top: 7.5%; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.m16 .bw { font-size: 9px; font-weight: 700; letter-spacing: 4px; color: rgba(255,255,255,0.45); }
+.m16 .bic { width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #fb923c); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 900; color: #fff; box-shadow: 0 0 10px rgba(249,115,22,0.5); }
+.m16 .dp {
+  position: absolute; left: 2.5%; top: 56%; z-index: 50;
+  width: 34%; background: rgba(249,115,22,0.03);
+  border: 1px solid rgba(249,115,22,0.12); border-radius: 8px; padding: 3%; overflow: hidden; position: relative;
+}
+.m16 .dp-acc { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #f97316, #fb923c); }
+.m16 .dp-pr { display: flex; align-items: baseline; gap: 3px; margin: 2px 0; }
+.m16 .dp-price { font-size: 9px; font-weight: 200; color: #fff; }
+.m16 .dp-chg-p { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; padding: 0 3px; font-size: 5px; font-weight: 700; color: #4ade80; }
+.m16 .dp-r { display: flex; justify-content: space-between; padding: 1.5px 0; border-bottom: 1px solid rgba(249,115,22,0.04); }
+.m16 .dp-r:last-child { border-bottom: none; }
+.m16 .dp-k { font-size: 4px; color: rgba(255,255,255,0.3); }
+.m16 .dp-v { font-size: 5px; color: #fdba74; font-weight: 500; }
+.m16 .sub-inner { border-radius: 6px; background: rgba(0,0,0,0.7); box-shadow: 0 3px 12px rgba(0,0,0,0.3); }
+</style>
+</head>
+<body>
+<h1>HUD v3 — 좌측 데이터 패널 16종</h1>
+<div class="desc">
+  상단: BITCOIN 중앙 | 자막: 좋아요 위(전체 가로폭) | 데이터 패널: <strong style="color:#f7931a">좌측</strong> 하단<br>
+  회색 = 유튜브 UI (상단바, 우측 버튼, 하단 채널/구독)
+</div>
+
+<div class="grid">
+
+<!-- 01 -->
+<div class="card">
+  <div class="card-label"><strong>#01</strong> Orange — 테이블</div>
+  <div class="phone m01">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-title">BTC / USD</div><div class="dp-r"><span class="dp-k">PRICE</span><span class="dp-v w">$71,573</span></div><div class="dp-r"><span class="dp-k">24H</span><span class="dp-v g">+1.22%</span></div><div class="dp-r"><span class="dp-k">HIGH</span><span class="dp-v">$72,140</span></div><div class="dp-r"><span class="dp-k">LOW</span><span class="dp-v">$70,280</span></div><div class="dp-r"><span class="dp-k">MCAP</span><span class="dp-v">$1.41T</span></div></div>
+  </div>
+</div>
+
+<!-- 02 -->
+<div class="card">
+  <div class="card-label"><strong>#02</strong> Orange Bold — 카드 스택</div>
+  <div class="phone m02">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-c hero"><span class="k">PRICE</span><span class="v w">$71,573</span></div><div class="dp-c"><span class="k">24H</span><span class="v g">+1.22%</span></div><div class="dp-c"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="dp-c"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="dp-c"><span class="k">VOL</span><span class="v">$28.4B</span></div></div>
+  </div>
+</div>
+
+<!-- 03 -->
+<div class="card">
+  <div class="card-label"><strong>#03</strong> Cyan — 터미널</div>
+  <div class="phone m03">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-hd">// BTC SCANNER //</div><div class="dp-ln"><span class="dim">$</span><span>$71,573</span></div><div class="dp-ln"><span class="dim">%</span><span>+1.22%</span></div><div class="dp-ln"><span class="dim">H</span><span>$72,140</span></div><div class="dp-ln"><span class="dim">L</span><span>$70,280</span></div><div class="dp-ln"><span class="dim">V</span><span>$28.4B</span></div><div class="dp-st">&gt; BULLISH<span class="cur">_</span></div></div>
+  </div>
+</div>
+
+<!-- 04 -->
+<div class="card">
+  <div class="card-label"><strong>#04</strong> Cyan — 2x2 그리드</div>
+  <div class="phone m04">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-price">$71,573</div><div class="dp-chg">+1.22%</div><div class="dp-grid"><div class="dp-cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="dp-cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="dp-cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="dp-cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 05 -->
+<div class="card">
+  <div class="card-label"><strong>#05</strong> Green — 미니멀 필</div>
+  <div class="phone m05">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-pill hero"><span class="k">BTC</span><span class="v w">$71,573</span></div><div class="dp-pill"><span class="k">24H</span><span class="v">+1.22%</span></div><div class="dp-pill"><span class="k">HIGH</span><span class="v">$72,140</span></div><div class="dp-pill"><span class="k">LOW</span><span class="v">$70,280</span></div><div class="dp-pill"><span class="k">VOL</span><span class="v">$28.4B</span></div></div>
+  </div>
+</div>
+
+<!-- 06 -->
+<div class="card">
+  <div class="card-label"><strong>#06</strong> Green — 좌측 보더 리스트</div>
+  <div class="phone m06">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-r"><div class="dp-k">PRICE</div><div class="dp-v big">$71,573</div></div><div class="dp-r"><div class="dp-k">24H CHANGE</div><div class="dp-v g">+1.22%</div></div><div class="dp-r"><div class="dp-k">24H HIGH</div><div class="dp-v">$72,140</div></div><div class="dp-r"><div class="dp-k">24H LOW</div><div class="dp-v">$70,280</div></div><div class="dp-bull">&#9650; BULLISH</div></div>
+  </div>
+</div>
+
+<!-- 07 -->
+<div class="card">
+  <div class="card-label"><strong>#07</strong> Gold — 럭셔리 테이블</div>
+  <div class="phone m07">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div><div class="gln"></div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-hd">BTC DATA</div><div class="dp-div"></div><div class="dp-r"><span class="dp-k">PRICE</span><span class="dp-v gold">$71,573</span></div><div class="dp-r"><span class="dp-k">24H</span><span class="dp-v g">+1.22%</span></div><div class="dp-div"></div><div class="dp-r"><span class="dp-k">HIGH</span><span class="dp-v">$72,140</span></div><div class="dp-r"><span class="dp-k">LOW</span><span class="dp-v">$70,280</span></div><div class="dp-r"><span class="dp-k">MCAP</span><span class="dp-v">$1.41T</span></div></div>
+  </div>
+</div>
+
+<!-- 08 -->
+<div class="card">
+  <div class="card-label"><strong>#08</strong> Gold — 히어로 카드 + 2x2</div>
+  <div class="phone m08">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-hero"><div class="price">$71,573</div><div class="chg-row"><span class="arr">&#9650;</span><span class="pct">+1.22%</span></div></div><div class="dp-mini"><div class="dp-mini-cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="dp-mini-cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="dp-mini-cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="dp-mini-cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 09 -->
+<div class="card">
+  <div class="card-label"><strong>#09</strong> Purple — 글래스 + 2x2</div>
+  <div class="phone m09">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-icon">&#8383;</div><div class="dp-price">$71,573</div><div class="dp-chg">+1.22%</div><div class="dp-grid"><div class="dp-cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="dp-cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="dp-cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="dp-cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 10 -->
+<div class="card">
+  <div class="card-label"><strong>#10</strong> Purple — 네온 박스</div>
+  <div class="phone m10">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-title">BTC DATA</div><div class="dp-price">$71,573</div><div class="dp-chg">+1.22%</div><div class="dp-r"><span class="dp-k">HIGH</span><span class="dp-v">$72,140</span></div><div class="dp-r"><span class="dp-k">LOW</span><span class="dp-v">$70,280</span></div><div class="dp-r"><span class="dp-k">VOL</span><span class="dp-v">$28.4B</span></div></div>
+  </div>
+</div>
+
+<!-- 11 -->
+<div class="card">
+  <div class="card-label"><strong>#11</strong> Red — 택티컬 보더</div>
+  <div class="phone m11">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="hln"></div><div class="btc">BITCOIN</div><div class="hln"></div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-r"><div class="dp-k">PRICE</div><div class="dp-v big">$71,573</div></div><div class="dp-r"><div class="dp-k">24H</div><div class="dp-v g">+1.22%</div></div><div class="dp-r"><div class="dp-k">HIGH</div><div class="dp-v">$72,140</div></div><div class="dp-r"><div class="dp-k">LOW</div><div class="dp-v">$70,280</div></div><div class="dp-alert">&#9650; BULLISH</div></div>
+  </div>
+</div>
+
+<!-- 12 -->
+<div class="card">
+  <div class="card-label"><strong>#12</strong> Red — 악센트 바 + 2x2</div>
+  <div class="phone m12">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp" style="position:relative"><div class="dp-accent"></div><div class="dp-price">$71,573</div><div class="dp-chg">+1.22%</div><div class="dp-grid"><div class="dp-cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="dp-cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="dp-cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="dp-cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 13 -->
+<div class="card">
+  <div class="card-label"><strong>#13</strong> White — LIVE 클린</div>
+  <div class="phone m13">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-dot-row"><div class="dp-dot"></div><div class="dp-live">LIVE</div></div><div class="dp-price">$71,573</div><div class="dp-chg-pill">+1.22%</div><div class="dp-r"><span class="dp-k">HIGH</span><span class="dp-v">$72,140</span></div><div class="dp-r"><span class="dp-k">LOW</span><span class="dp-v">$70,280</span></div><div class="dp-r"><span class="dp-k">VOL</span><span class="dp-v">$28.4B</span></div></div>
+  </div>
+</div>
+
+<!-- 14 -->
+<div class="card">
+  <div class="card-label"><strong>#14</strong> White — 보더 카드</div>
+  <div class="phone m14">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-price">$71,573</div><div class="dp-chg"><span>+1.22%</span></div><div class="dp-r"><span class="dp-k">HIGH</span><span class="dp-v">$72,140</span></div><div class="dp-r"><span class="dp-k">LOW</span><span class="dp-v">$70,280</span></div><div class="dp-r"><span class="dp-k">VOL</span><span class="dp-v">$28.4B</span></div><div class="dp-r"><span class="dp-k">MCAP</span><span class="dp-v">$1.41T</span></div></div>
+  </div>
+</div>
+
+<!-- 15 -->
+<div class="card">
+  <div class="card-label"><strong>#15</strong> Teal — 헥사곤 + 2x2</div>
+  <div class="phone m15">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="top"><div class="btc">BITCOIN</div><div class="dots"><span></span><span></span><span></span><span></span><span></span></div></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-hex"><div class="dp-hex-s">&#8383;</div></div><div class="dp-price">$71,573</div><div class="dp-chg">+1.22%</div><div class="dp-grid"><div class="dp-cell"><div class="k">HIGH</div><div class="v">$72,140</div></div><div class="dp-cell"><div class="k">LOW</div><div class="v">$70,280</div></div><div class="dp-cell"><div class="k">VOL</div><div class="v">$28.4B</div></div><div class="dp-cell"><div class="k">MCAP</div><div class="v">$1.41T</div></div></div></div>
+  </div>
+</div>
+
+<!-- 16 -->
+<div class="card">
+  <div class="card-label"><strong>#16</strong> BIT⚡COIN — 프로 패널</div>
+  <div class="phone m16">
+    <div class="yt-top">YT Premium / Search</div>
+    <div class="yt-right"><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-bw"><div class="yt-b"></div><div class="yt-l"></div></div><div class="yt-ch"></div></div>
+    <div class="yt-bottom"><div class="yt-bottom-text">@bit_news · Subscribe</div></div>
+    <div class="ctl"></div><div class="cbr"></div>
+    <div class="top"><span class="bw">BIT</span><div class="bic">&#8383;</div><span class="bw">COIN</span></div>
+    <div class="sub"><div class="sub-inner"><div class="sub-t">Bitcoin surges past $71K as<br>institutional demand grows</div></div></div>
+    <div class="dp"><div class="dp-acc"></div><div class="dp-pr"><span class="dp-price">$71,573</span><span class="dp-chg-p">+1.22%</span></div><div class="dp-r"><span class="dp-k">HIGH</span><span class="dp-v">$72,140</span></div><div class="dp-r"><span class="dp-k">LOW</span><span class="dp-v">$70,280</span></div><div class="dp-r"><span class="dp-k">VOL</span><span class="dp-v">$28.4B</span></div><div class="dp-r"><span class="dp-k">MCAP</span><span class="dp-v">$1.41T</span></div></div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
