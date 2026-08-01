@@ -6,9 +6,11 @@ load_dotenv()
 
 # === Paths ===
 BASE_DIR = Path(__file__).resolve().parent.parent
-ASSETS_DIR = BASE_DIR / "assets"
+ASSETS_DIR = BASE_DIR / "_internal" / "assets"
 OUTPUT_DIR = BASE_DIR / "output"
-TEMPLATES_DIR = BASE_DIR / "templates"
+BUILD_DIR = OUTPUT_DIR / "_build"
+TEMPLATES_DIR = BASE_DIR / "_internal" / "templates"
+DATA_DIR = BASE_DIR / "_internal" / "data"
 
 # === ElevenLabs ===
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
@@ -23,6 +25,15 @@ GOOGLE_TTS_API_KEY = os.getenv("GOOGLE_TTS_API_KEY", GEMINI_API_KEY)  # fallback
 
 # === Pexels (free stock video) ===
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
+
+# === Suno API (BGM generation) ===
+SUNO_API_KEY = os.getenv("SUNO_API_KEY", "")
+
+# === X (Twitter) API ===
+X_API_KEY = os.getenv("X_API_KEY", "")
+X_API_SECRET = os.getenv("X_API_SECRET", "")
+X_ACCESS_TOKEN = os.getenv("X_ACCESS_TOKEN", "")
+X_ACCESS_TOKEN_SECRET = os.getenv("X_ACCESS_TOKEN_SECRET", "")
 
 # === Video Settings ===
 VIDEO_WIDTH = 1080
@@ -60,6 +71,8 @@ LANGUAGES = {
         "youtube_channel_id": "UCxTQrx4PqaQ10m_kVZdKFcA",  # bit_news
         "youtube_token": "youtube_token_en.json",
         "tags": ["bitcoin", "crypto", "btc", "cryptocurrency", "bitcoin news", "crypto news"],
+        "x_tags": ["Bitcoin", "BTC", "CryptoNews", "BitcoinNews"],
+        "x_token": "x_token_en.json",
         "max_words": 130,
     },
     "ko": {
@@ -70,6 +83,8 @@ LANGUAGES = {
         "youtube_channel_id": os.getenv("YOUTUBE_CHANNEL_ID_KO", ""),
         "youtube_token": "youtube_token_ko.json",
         "tags": ["비트코인", "암호화폐", "비트코인뉴스", "크립토", "BTC", "코인뉴스"],
+        "x_tags": ["비트코인", "BTC", "코인뉴스", "암호화폐"],
+        "x_token": "x_token_ko.json",
         "max_words": 100,
     },
     "ja": {
@@ -80,6 +95,20 @@ LANGUAGES = {
         "youtube_channel_id": os.getenv("YOUTUBE_CHANNEL_ID_JA", ""),
         "youtube_token": "youtube_token_ja.json",
         "tags": ["ビットコイン", "仮想通貨", "暗号資産", "BTC", "ビットコインニュース"],
+        "x_tags": ["ビットコイン", "BTC", "仮想通貨", "暗号資産"],
+        "x_token": "x_token_ja.json",
         "max_words": 100,
+    },
+    "es": {
+        "name": "Spanish",
+        "tts_engine": "google",
+        "google_voice": "es-ES-Chirp3-HD-Aoede",
+        "voice_id": os.getenv("ELEVENLABS_VOICE_ID_ES", ""),
+        "youtube_channel_id": "UCqJMy4UEG0xomcUDv7eIHCw",
+        "youtube_token": "youtube_token_es.json",
+        "tags": ["bitcoin", "criptomonedas", "BTC", "noticias bitcoin", "cripto", "criptonoticias"],
+        "x_tags": ["Bitcoin", "BTC", "CriptoNoticias", "Criptomonedas"],
+        "x_token": "x_token_es.json",
+        "max_words": 105,
     },
 }

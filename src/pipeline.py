@@ -32,6 +32,7 @@ if sys.stdout.encoding != "utf-8":
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
 from src.news_fetcher import fetch_all, mark_articles_used
+from src.quota_manager import QuotaManager
 from src.script_generator import (
     generate_script,
     generate_title_and_description,
@@ -44,12 +45,13 @@ from src.script_generator import (
 from src.tts_generator import generate_audio
 from src.video_composer import compose_video
 from src.youtube_uploader import upload_video, upload_captions
+from src.x_uploader import upload_video_to_x, build_tweet_text
 from src.report_generator import generate_report
 from config.settings import OUTPUT_DIR, LANGUAGES
 
 
-# Checkpoint directory for resume support (in data/, not output/)
-CHECKPOINT_DIR = OUTPUT_DIR.parent / "data" / "checkpoints"
+# Checkpoint directory for resume support
+CHECKPOINT_DIR = OUTPUT_DIR.parent / "_internal" / "data" / "checkpoints"
 
 
 def _safe_title(title: str) -> str:
@@ -161,36 +163,79 @@ def _generate_for_language(
     print(f"  Composing video ({lang_name})...")
     price_data = news_data.get("price") if news_data else None
     fear_greed = news_data.get("fear_greed") if news_data else None
+    gold_data = news_data.get("gold") if news_data else None
+    dxy_data = news_data.get("dxy") if news_data else None
     video_path, srt_path = compose_video(
         audio_path, display_script, video_filename,
         price_data=price_data, tts_script=tts_script,
-        fear_greed=fear_greed,
+        fear_greed=fear_greed, gold=gold_data, dxy=dxy_data,
+        headline=metadata.get("title", ""),
+        lang=lang,
     )
 
-    # Upload
+    # Upload (with quota check)
     video_id = None
     if upload:
         token_file = lang_cfg.get("youtube_token", "")
         if not token_file:
             print(f"  [SKIP] No youtube_token configured for {lang_name}")
         else:
-            print(f"  Uploading to YouTube ({lang_name})...")
-            video_id = upload_video(
-                video_path=video_path,
-                title=metadata["title"],
-                description=metadata["description"],
-                tags=lang_cfg.get("tags", []),
-                token_filename=token_file,
-            )
-            # Upload SRT captions for SEO
-            if video_id and srt_path and srt_path.exists():
-                print(f"  Uploading captions ({lang_name})...")
-                upload_captions(
-                    video_id=video_id,
-                    srt_path=srt_path,
-                    language=lang,
-                    token_filename=token_file,
+            qm = QuotaManager()
+            if not qm.can_upload():
+                print(f"  [SKIP] YouTube quota insufficient for {lang_name}")
+                print(f"  {qm.summary()}")
+                qm.record_error(lang, "quota_pre_check_failed")
+            else:
+                print(f"  Uploading to YouTube ({lang_name})...")
+                try:
+                    video_id = upload_video(
+                        video_path=video_path,
+                        title=metadata["title"],
+                        description=metadata["description"],
+                        tags=lang_cfg.get("tags", []),
+                        token_filename=token_file,
+                    )
+                    qm.record_upload(lang)
+                except Exception as e:
+                    error_msg = str(e)
+                    print(f"  [ERROR] Upload failed ({lang_name}): {error_msg[:100]}")
+                    qm.record_error(lang, error_msg)
+                    if "quotaExceeded" in error_msg:
+                        print(f"  [QUOTA] Daily limit reached. Skipping remaining uploads.")
+                        # Mark quota as exhausted
+                        qm.record_usage("quota_exhausted", lang=lang, cost=qm.remaining_today())
+
+                # Upload SRT captions for SEO
+                if video_id and srt_path and srt_path.exists():
+                    print(f"  Uploading captions ({lang_name})...")
+                    caption_ok = upload_captions(
+                        video_id=video_id,
+                        srt_path=srt_path,
+                        language=lang,
+                        token_filename=token_file,
+                    )
+                    if caption_ok:
+                        qm.record_caption(lang)
+
+    # Upload to X (Twitter) — independent of YouTube upload
+    tweet_id = None
+    if upload:
+        x_token = lang_cfg.get("x_token", "")
+        if x_token:
+            print(f"  Uploading to X ({lang_name})...")
+            try:
+                tweet_text = build_tweet_text(
+                    title=metadata["title"],
+                    lang=lang,
+                    tags=lang_cfg.get("x_tags", []),
                 )
+                tweet_id = upload_video_to_x(
+                    video_path=video_path,
+                    text=tweet_text,
+                    lang=lang,
+                )
+            except Exception as e:
+                print(f"  [X][ERROR] Upload failed ({lang_name}): {str(e)[:100]}")
 
     result = {
         "lang": lang,
@@ -200,6 +245,7 @@ def _generate_for_language(
         "audio_path": str(audio_path),
         "video_path": str(video_path),
         "video_id": video_id,
+        "tweet_id": tweet_id,
     }
 
     # Save per-language checkpoint
@@ -235,6 +281,23 @@ def run_pipeline(
         print(f"  RESUMING from checkpoint (last: {checkpoint.get('last_stage', '?')})")
     print(f"  Languages: {', '.join(lang.upper() for lang in languages)}")
     print(f"{'='*50}\n")
+
+    # Pre-flight quota check (generate all languages, upload only within quota)
+    upload_languages = set(languages)
+    if upload:
+        qm = QuotaManager()
+        can_all, max_count = qm.can_upload_all(len(languages))
+        print(qm.summary())
+        if not can_all:
+            if max_count == 0:
+                print(f"\n[QUOTA] Cannot upload any videos today. Generating videos only (no upload).")
+                upload_languages = set()
+            else:
+                print(f"\n[QUOTA] Can only upload {max_count}/{len(languages)} languages. Will generate all, upload first {max_count}.")
+                priority = ["en", "ko", "ja", "es"]
+                upload_list = [l for l in priority if l in languages][:max_count]
+                upload_languages = set(upload_list)
+        print()
 
     # Step 1: Fetch news (or use checkpoint)
     if checkpoint and "fetch" in checkpoint:
@@ -309,9 +372,10 @@ def run_pipeline(
         if lang not in LANGUAGES:
             print(f"  [SKIP] Unknown language: {lang}")
             continue
+        lang_upload = upload and (lang in upload_languages)
         result = _generate_for_language(
             lang, en_script, en_metadata, news_data, timestamp,
-            upload=upload, checkpoint=checkpoint,
+            upload=lang_upload, checkpoint=checkpoint,
         )
         results.append(result)
 
@@ -329,7 +393,7 @@ def run_pipeline(
         ],
     }
 
-    log_dir = OUTPUT_DIR / "logs"
+    log_dir = OUTPUT_DIR / "_build" / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_path = log_dir / f"run_{timestamp}.json"
     with open(log_path, "w", encoding="utf-8") as f:
@@ -355,7 +419,9 @@ def run_pipeline(
         else:
             print(f"  [{r['lang'].upper()}] {r.get('video_path', 'N/A')}")
             if r.get("video_id"):
-                print(f"         -> https://youtube.com/shorts/{r['video_id']}")
+                print(f"         -> YT: https://youtube.com/shorts/{r['video_id']}")
+            if r.get("tweet_id"):
+                print(f"         -> X:  https://x.com/i/status/{r['tweet_id']}")
     print(f"  Log: {log_path}")
     print(f"  Report: {pdf_path}")
     print(f"{'='*50}\n")
@@ -412,6 +478,23 @@ def run_education_pipeline(
     print(f"  BTC Education Pipeline - {timestamp}")
     print(f"  Languages: {', '.join(lang.upper() for lang in languages)}")
     print(f"{'='*50}\n")
+
+    # Pre-flight quota check (generate all languages, upload only within quota)
+    upload_languages = set(languages)
+    if upload:
+        qm = QuotaManager()
+        can_all, max_count = qm.can_upload_all(len(languages))
+        print(qm.summary())
+        if not can_all:
+            if max_count == 0:
+                print(f"\n[QUOTA] Cannot upload any videos today. Generating videos only (no upload).")
+                upload_languages = set()
+            else:
+                print(f"\n[QUOTA] Can only upload {max_count}/{len(languages)} languages. Will generate all, upload first {max_count}.")
+                priority = ["en", "ko", "ja", "es"]
+                upload_list = [l for l in priority if l in languages][:max_count]
+                upload_languages = set(upload_list)
+        print()
 
     # Step 1: Generate education script
     print("[1] Generating education script...")
@@ -480,29 +563,67 @@ def run_education_pipeline(
         print(f"  Composing video ({lang_name})...")
         video_path, srt_path = compose_video(
             audio_path, display_script, video_filename, tts_script=tts_script,
+            headline=metadata.get("title", ""),
+            lang=lang,
         )
 
-        # Upload
+        # Upload (only if this language is within quota)
         video_id = None
-        if upload:
+        if upload and lang in upload_languages:
             token_file = lang_cfg.get("youtube_token", "")
             if token_file:
-                print(f"  Uploading to YouTube ({lang_name})...")
-                video_id = upload_video(
-                    video_path=video_path,
-                    title=metadata["title"],
-                    description=metadata["description"],
-                    tags=lang_cfg.get("tags", []),
-                    token_filename=token_file,
-                )
-                if video_id and srt_path and srt_path.exists():
-                    print(f"  Uploading captions ({lang_name})...")
-                    upload_captions(
-                        video_id=video_id,
-                        srt_path=srt_path,
-                        language=lang,
-                        token_filename=token_file,
+                qm = QuotaManager()
+                if not qm.can_upload():
+                    print(f"  [SKIP] YouTube quota insufficient for {lang_name}")
+                    qm.record_error(lang, "quota_pre_check_failed")
+                else:
+                    print(f"  Uploading to YouTube ({lang_name})...")
+                    try:
+                        video_id = upload_video(
+                            video_path=video_path,
+                            title=metadata["title"],
+                            description=metadata["description"],
+                            tags=lang_cfg.get("tags", []),
+                            token_filename=token_file,
+                        )
+                        qm.record_upload(lang)
+                    except Exception as e:
+                        error_msg = str(e)
+                        print(f"  [ERROR] Upload failed ({lang_name}): {error_msg[:100]}")
+                        qm.record_error(lang, error_msg)
+
+                    if video_id and srt_path and srt_path.exists():
+                        print(f"  Uploading captions ({lang_name})...")
+                        caption_ok = upload_captions(
+                            video_id=video_id,
+                            srt_path=srt_path,
+                            language=lang,
+                            token_filename=token_file,
+                        )
+                        if caption_ok:
+                            qm.record_caption(lang)
+        elif upload and lang not in upload_languages:
+            print(f"  [SKIP] Upload skipped (quota limit) - video saved locally")
+
+        # Upload to X (Twitter)
+        tweet_id = None
+        if upload:
+            x_token = lang_cfg.get("x_token", "")
+            if x_token:
+                print(f"  Uploading to X ({lang_name})...")
+                try:
+                    tweet_text = build_tweet_text(
+                        title=metadata["title"],
+                        lang=lang,
+                        tags=lang_cfg.get("x_tags", []),
                     )
+                    tweet_id = upload_video_to_x(
+                        video_path=video_path,
+                        text=tweet_text,
+                        lang=lang,
+                    )
+                except Exception as e:
+                    print(f"  [X][ERROR] Upload failed ({lang_name}): {str(e)[:100]}")
 
         results.append({
             "lang": lang,
@@ -511,6 +632,7 @@ def run_education_pipeline(
             "audio_path": str(audio_path),
             "video_path": str(video_path),
             "video_id": video_id,
+            "tweet_id": tweet_id,
         })
 
     # Save log
@@ -523,7 +645,7 @@ def run_education_pipeline(
         "languages": results,
     }
 
-    log_dir = OUTPUT_DIR / "logs"
+    log_dir = OUTPUT_DIR / "_build" / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_path = log_dir / f"edu_{timestamp}.json"
     with open(log_path, "w", encoding="utf-8") as f:
@@ -549,7 +671,9 @@ def run_education_pipeline(
         else:
             print(f"  [{r['lang'].upper()}] {r.get('video_path', 'N/A')}")
             if r.get("video_id"):
-                print(f"         -> https://youtube.com/shorts/{r['video_id']}")
+                print(f"         -> YT: https://youtube.com/shorts/{r['video_id']}")
+            if r.get("tweet_id"):
+                print(f"         -> X:  https://x.com/i/status/{r['tweet_id']}")
     print(f"  Log: {log_path}")
     print(f"  Report: {pdf_path}")
     print(f"{'='*50}\n")

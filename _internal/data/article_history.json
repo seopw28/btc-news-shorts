@@ -1,0 +1,910 @@
+{
+  "used_articles": [
+    {
+      "title": "Bitcoin whales are starting to accumulate again at $71K: Santiment",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-15T23:02:56.320934"
+    },
+    {
+      "title": "Bitcoin sold off first when the U.S.-Iran war began. Two weeks later, it's outperforming nearly everything",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-15T23:13:07.572029"
+    },
+    {
+      "title": "How Florida's Stablecoin Bill Mirrors 'Big Brother' Tools Outlawed Under Ron DeSantis' CDBC Ban",
+      "source": "Decrypt",
+      "used_at": "2026-03-16T00:43:38.131398"
+    },
+    {
+      "title": "Bitcoin price teases key support reclaims with weekly close above $70K",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T00:43:38.131398"
+    },
+    {
+      "title": "How Bitcoin and Gold reacted differently to the Iran war shock",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T00:43:38.131398"
+    },
+    {
+      "title": "Bitwise’s Matt Hougan revisits $1 million bitcoin — analysts agree but debate his timeline",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T00:43:38.131398"
+    },
+    {
+      "title": "Forensic analysis uncovers draft of $5M deal tied to Milei’s Libra promotion: Report",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T00:43:38.131398"
+    },
+    {
+      "title": "Here is why Nasdaq and owner of NYSE are putting the $126 trillion equity market on blockchain",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T01:06:14.035590"
+    },
+    {
+      "title": "Here’s what happened in crypto today",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T01:06:14.035590"
+    },
+    {
+      "title": "What Is AGI? The AI Goal Everyone Talks About But No One Can Clearly Define",
+      "source": "Decrypt",
+      "used_at": "2026-03-16T01:06:14.035590"
+    },
+    {
+      "title": "Visa is ready for AI agents. So is Coinbase. They're building very different internets",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T01:06:14.035590"
+    },
+    {
+      "title": "AI agents are quietly rewriting prediction market trading",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T01:06:14.035590"
+    },
+    {
+      "title": "Altseason is dead, expect shorter cycles and ‘violent’ rotations: Crypto exec",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T01:54:50.731878"
+    },
+    {
+      "title": "Aave to launch 'Aave Shield' after $50M token swap mishap",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T10:20:54.242152"
+    },
+    {
+      "title": "Bitcoin Advances as Oil Jumps Toward $100 on Further Middle East Strikes",
+      "source": "Decrypt",
+      "used_at": "2026-03-16T10:20:54.242152"
+    },
+    {
+      "title": "CLARITY Act risks handing crypto to centralized players: Gnosis exec",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T10:20:54.242152"
+    },
+    {
+      "title": "You Can Control an AI Agent's Crypto Spending With Ledger Hardware Wallets and MoonPay",
+      "source": "Decrypt",
+      "used_at": "2026-03-16T10:20:54.242152"
+    },
+    {
+      "title": "The SEC and CFTC join hands: State of Crypto",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T10:20:54.242152"
+    },
+    {
+      "title": "Venus Protocol hit by $3.7M in 'supply cap' attack",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T11:03:58.837902"
+    },
+    {
+      "title": "Crypto’s age of hype is over, making way for the real infrastructure to be built",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T11:03:58.837902"
+    },
+    {
+      "title": "We Tested Utopai's PAI: The Best Long-Form AI Video Generator Today?",
+      "source": "Decrypt",
+      "used_at": "2026-03-16T11:03:58.837902"
+    },
+    {
+      "title": "Vitalik Buterin promotes an update simplifying Ethereum node software",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T11:03:58.837902"
+    },
+    {
+      "title": "Bitcoin set for best week since September 2025 as correlation with tech stocks weakens",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T11:03:58.837902"
+    },
+    {
+      "title": "Aave to launch 'Aave Shield' after $50M token swap mishap",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T11:12:49.261178"
+    },
+    {
+      "title": "Bitcoin Advances as Oil Jumps Toward $100 on Further Middle East Strikes",
+      "source": "Decrypt",
+      "used_at": "2026-03-16T11:12:49.261178"
+    },
+    {
+      "title": "CLARITY Act risks handing crypto to centralized players: Gnosis exec",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T11:12:49.261178"
+    },
+    {
+      "title": "You Can Control an AI Agent's Crypto Spending With Ledger Hardware Wallets and MoonPay",
+      "source": "Decrypt",
+      "used_at": "2026-03-16T11:12:49.261178"
+    },
+    {
+      "title": "The SEC and CFTC join hands: State of Crypto",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T11:12:49.261178"
+    },
+    {
+      "title": "Fed headlines central bank rate decisions, Gemini earnings: Crypto Week Ahead",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T18:52:15.504687"
+    },
+    {
+      "title": "Australian Senate committee backs new crypto platform licensing bill",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T18:52:15.504687"
+    },
+    {
+      "title": "AI data center gold rush sparks debate over impact on Bitcoin mining",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T18:52:15.504687"
+    },
+    {
+      "title": "SEC drops case against BitClout founder with prejudice",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T18:52:15.504687"
+    },
+    {
+      "title": "Balaji calls for more ‘crypto tools’ for refugees amid Middle East tensions",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T18:52:15.504687"
+    },
+    {
+      "title": "Bitcoin briefly tops $74,000 as ether, sol, ada gains as much as 6% in Monday surge",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T18:57:31.532969"
+    },
+    {
+      "title": "Bitcoin hits $74.4K six-week high as analysts see ‘more upside’ for BTC",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T20:04:40.376371"
+    },
+    {
+      "title": "Altcoins jump as bitcoin inches toward potential $74,000 breakout",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-16T20:04:40.376371"
+    },
+    {
+      "title": "$58K BTC price still in play? Five things to know in Bitcoin this week",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-16T20:11:08.356151"
+    },
+    {
+      "title": "Did ChatGPT Really Cure a Dog's Cancer? It's Complicated",
+      "source": "Decrypt",
+      "used_at": "2026-03-17T09:03:13.628830"
+    },
+    {
+      "title": "Pokémon Go Players Helped Map the World—Now That Data Is Training Delivery Robots",
+      "source": "Decrypt",
+      "used_at": "2026-03-17T09:03:13.628830"
+    },
+    {
+      "title": "AI-linked crypto tokens surge as Nvidia's Jensen Huang touts agentic future",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-17T09:03:13.628830"
+    },
+    {
+      "title": "Price predictions 3/16: SPX, DXY, BTC, ETH, BNB, XRP, SOL, DOGE, ADA, HYPE",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-17T09:03:13.628830"
+    },
+    {
+      "title": "Man accuses wife of using CCTV cameras to steal $172 million bitcoin from his hardware wallet",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-17T09:03:13.628830"
+    },
+    {
+      "title": "XRP holders hit a record 7.7M: Will price break through $1.60 next?",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-18T01:22:10.211514"
+    },
+    {
+      "title": "Facing a crisis, Bitcoin treasury companies need to pivot to survive",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:32:38.753507"
+    },
+    {
+      "title": "Theo closes $100M facility backing gold-linked yield stablecoin",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-18T01:32:38.753507"
+    },
+    {
+      "title": "XRP Flips BNB, Hitting Highest Price in a Month as Ripple Plans to Seek Brazil License",
+      "source": "Decrypt",
+      "used_at": "2026-03-18T01:32:38.753507"
+    },
+    {
+      "title": "World launches AgentKit with Coinbase integration to enable human-verified AI agents",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-18T01:32:38.753507"
+    },
+    {
+      "title": "Strategy’s latest massive bitcoin purchase offers insight into its evolving funding model",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:32:38.753507"
+    },
+    {
+      "title": "Strategy halts Bitcoin buying via STRC: Will BTC price dip again?",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-18T01:33:10.795700"
+    },
+    {
+      "title": "Popular Solana wallet Phantom wins CFTC nod to access regulated derivatives markets",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:33:10.795700"
+    },
+    {
+      "title": "Sam Altman’s World Taps Coinbase’s Open Protocol to Verify Humans Behind AI Agents",
+      "source": "Decrypt",
+      "used_at": "2026-03-18T01:33:10.795700"
+    },
+    {
+      "title": "Sam Altman's World teams up with Coinbase to prove there is a real person behind every AI transaction",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:33:10.795700"
+    },
+    {
+      "title": "Vietnam pushes local crypto exchanges as Hanoi moves to block offshore trading: Reuters",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:33:10.795700"
+    },
+    {
+      "title": "Allium Brings 65TB of Data from Bitcoin, Ethereum, Sui and More to Walrus",
+      "source": "Decrypt",
+      "used_at": "2026-03-18T01:37:04.465479"
+    },
+    {
+      "title": "Strategy (MSTR) is About to Have More Bitcoin Than BlackRock’s IBIT",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-18T01:37:04.465479"
+    },
+    {
+      "title": "Robinhood’s new venture fund just snapped up stakes in Stripe and ElevenLabs",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:37:04.465479"
+    },
+    {
+      "title": "'Gensler and Biden were just better for crypto,' says Tally CEO as DAO governance platform shuts down",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:37:04.465479"
+    },
+    {
+      "title": "Crypto trading firm GSR expands token advisory with $57 million in acquisitions",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:37:04.465479"
+    },
+    {
+      "title": "Mastercard agrees to acquire BVNK in $1.8B stablecoin deal",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-18T01:42:22.722390"
+    },
+    {
+      "title": "Vietnam Begins to Restrict Overseas Crypto Trading, Domestic Licensing Race Accelerates",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-18T01:42:22.722390"
+    },
+    {
+      "title": "Capital B Raises €3 Million to Expand Bitcoin Treasury Holdings",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-18T01:42:22.722390"
+    },
+    {
+      "title": "Maestro launches mining-backed Bitcoin credit market for institutions",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-18T01:42:22.722390"
+    },
+    {
+      "title": "U.S. Democrats target government officials gaming prediction markets on war action",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T01:42:22.722390"
+    },
+    {
+      "title": "STRC: The Global Bitcoin Dollar Cost Average",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-18T21:47:22.751005"
+    },
+    {
+      "title": "Crypto cards aren't the future, but onchain credit is",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-18T21:47:22.751005"
+    },
+    {
+      "title": "Morning Minute: The SEC &#038; CFTC Declare 'Most Crypto Assets' Are Not Securities",
+      "source": "Decrypt",
+      "used_at": "2026-03-18T21:47:22.751005"
+    },
+    {
+      "title": "Forget AGI—Top AI Models Still Struggle With Math",
+      "source": "Decrypt",
+      "used_at": "2026-03-18T21:47:22.751005"
+    },
+    {
+      "title": "UK lawmakers urge ‘immediate moratorium’ on crypto political donations",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-18T21:47:22.751005"
+    },
+    {
+      "title": "Fed leaves rates unchanged, says geopolitical uncertainty clouds outlook",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-19T07:21:02.018868"
+    },
+    {
+      "title": "Kalshi CEO fires back against Arizona criminal charges as ‘total overstep‘",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-19T07:21:02.018868"
+    },
+    {
+      "title": "Algorand Foundation Cuts 25% of Staff as Crypto Industry Layoffs Grow",
+      "source": "Decrypt",
+      "used_at": "2026-03-19T07:21:02.018868"
+    },
+    {
+      "title": "SEC Approves Nasdaq Rule to Trade Tokenized Securities, Paving Way for Blockchain Integration",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-19T07:21:02.018868"
+    },
+    {
+      "title": "The Core Issue: Your Node Vs. The Digital Wilderness",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-19T07:21:02.018868"
+    },
+    {
+      "title": "Morning Minute: Markets Tumble as Iran War Escalates",
+      "source": "Decrypt",
+      "used_at": "2026-03-19T21:27:56.319161"
+    },
+    {
+      "title": "Bitcoin ETF inflow streak snaps with $164M outflows amid BTC dip",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-19T21:27:56.319161"
+    },
+    {
+      "title": "Ethereum long squeeze risk rises as ETH price dips to $2,100",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-19T21:27:56.319161"
+    },
+    {
+      "title": "Bitcoin Dips Under $70K as Stocks Tumble on Hawkish Fed Hold—What’s Next?",
+      "source": "Decrypt",
+      "used_at": "2026-03-19T21:27:56.319161"
+    },
+    {
+      "title": "Bitcoin whales move millions as Iran war sends oil surging",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-19T21:27:56.319161"
+    },
+    {
+      "title": "Gold falters as macro pressures build, bitcoin holds liquidity trend",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-23T00:29:58.272170"
+    },
+    {
+      "title": "Resolv says no assets lost as DeFi protocols respond to USR exploit",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-23T00:29:58.272170"
+    },
+    {
+      "title": "How AI Is Being Used to Clear Court Backlogs in LA",
+      "source": "Decrypt",
+      "used_at": "2026-03-23T00:29:58.272170"
+    },
+    {
+      "title": "Bitcoin risks 50% drop as BTC's positive correlation with US stocks grows",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-23T00:29:58.272170"
+    },
+    {
+      "title": "Coinbase-backed CoinDCX founders questioned in fraud case: Report",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-23T00:29:58.272170"
+    },
+    {
+      "title": "Crypto Markets Grapple With Volatility as ETFs Shed $177M Last Week",
+      "source": "Decrypt",
+      "used_at": "2026-03-23T22:12:28.588610"
+    },
+    {
+      "title": "Tom Lee's Bitmine extends buying streak with $138 million ETH purchase, betting on crypto slump ending",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-23T22:12:28.588610"
+    },
+    {
+      "title": "Bitcoin's wild roller coaster ride leaves leveraged traders with $415 million in liquidations",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-23T22:12:28.588610"
+    },
+    {
+      "title": "H100 eyes Europe’s largest bitcoin treasury with 3,500 BTC in proposed acquistions",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-23T22:12:28.588610"
+    },
+    {
+      "title": "Airdrops rewarded extraction and ended real communities",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-23T22:12:28.588610"
+    },
+    {
+      "title": "Pharmaceutical firm pivots to stablecoins, holds nearly 9% of SKY's supply",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-23T23:48:01.355054"
+    },
+    {
+      "title": "H100 Eyes Strategic Bitcoin Acquisition to Triple its BTC Holdings and Expand Institutional Scale",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-23T23:48:01.355054"
+    },
+    {
+      "title": "Senate bill to target sports betting ban on prediction markets: WSJ",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-23T23:48:01.355054"
+    },
+    {
+      "title": "Backpack launches BP token on Solana with 25% airdrop, no insider allocation",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-23T23:48:01.355054"
+    },
+    {
+      "title": "Spain arrests suspect in 2025 kidnapping of Ledger co-founder",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-23T23:48:01.355054"
+    },
+    {
+      "title": "Wall Street’s crypto push has been years in the making says Morgan Stanley",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-25T01:17:39.545441"
+    },
+    {
+      "title": "Circle stock plunges 18% as a new draft of the Clarity Act threatens stablecoin rewards",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-25T01:17:39.545441"
+    },
+    {
+      "title": "CFTC Launches Innovation Task Force for Bitcoin, Crypto, AI, and Prediction Markets",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-25T01:17:39.545441"
+    },
+    {
+      "title": "Crypto finance is beginning to look at lot more traditional, Aave and Ethena founders say",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-25T01:17:39.545441"
+    },
+    {
+      "title": "Why cautious TradFi firms love staked ether",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-25T01:17:39.545441"
+    },
+    {
+      "title": "Bitcoin Price Rises as Iran Signals Push for Full End to Conflict",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-25T23:02:34.353873"
+    },
+    {
+      "title": "STS Digital taps Kraken as distributor for structured crypto platform",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-25T23:02:34.353873"
+    },
+    {
+      "title": "CoinDesk 20 performance update: Stellar (XLM) gains 6% as all constituents rise",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-25T23:02:34.353873"
+    },
+    {
+      "title": "Bitcoin rebounds during Iran war, but safe haven role unproven",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-25T23:02:34.353873"
+    },
+    {
+      "title": "Bitcoin bounces from 50-day trend line with $72K BTC price now key focus",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-25T23:02:34.353873"
+    },
+    {
+      "title": "Michael Saylor’s Strategy dominates DAT bitcoin buying as treasury demand collapses",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-26T18:26:42.376794"
+    },
+    {
+      "title": "Fenbushi co-founder offers bounty to recover $42M lost in 2022 hack",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-26T18:26:42.376794"
+    },
+    {
+      "title": "Some bitcoin indicators are still going the wrong way, challenging the bullish $70,000 holdout story",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-26T18:26:42.376794"
+    },
+    {
+      "title": "UK pushes ahead with temporary ban on political crypto donations",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-26T18:26:42.376794"
+    },
+    {
+      "title": "Coinbase opposes stablecoin compromise in Senate crypto bill: Report",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-26T18:26:42.376794"
+    },
+    {
+      "title": "Morning Minute: Fannie Mae Accepts Crypto for Mortgages",
+      "source": "Decrypt",
+      "used_at": "2026-03-27T22:27:32.130633"
+    },
+    {
+      "title": "Trust will become crypto’s real currency in the AI economy",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-27T22:27:32.130633"
+    },
+    {
+      "title": "NYSE owner doubles down on Polymarket with fresh $600 million investment",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-27T22:27:32.130633"
+    },
+    {
+      "title": "Bitcoin Dips Under $67K as Geopolitical Uncertainty, Treasury Yields Spook Traders",
+      "source": "Decrypt",
+      "used_at": "2026-03-27T22:27:32.130633"
+    },
+    {
+      "title": "Retail investors drive widespread bitcoin selling as prices fall",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-27T22:27:32.130633"
+    },
+    {
+      "title": "Anthropic’s massive 'Claude Mythos' leak sends software names — and crypto — sharply lower",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-27T23:40:25.171283"
+    },
+    {
+      "title": "Bitcoin Price Slides to Two-Week Low as Liquidations Top $300 Million and Macro Pressure Builds",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-27T23:40:25.171283"
+    },
+    {
+      "title": "ECB paper questions if DeFi DAOs are decentralized enough to sit outside MiCA",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-27T23:40:25.171283"
+    },
+    {
+      "title": "Interview with SBF’s parents drops chance of pardon on betting markets",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-27T23:40:25.171283"
+    },
+    {
+      "title": "Bitcoin nears lowest in three weeks as BTC price targets drop to $41K",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-27T23:40:25.171283"
+    },
+    {
+      "title": "Kalshi legal woes grow with Washington state gambling suit",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-29T09:46:52.660061"
+    },
+    {
+      "title": "Tokenized platform xStocks brings new private shares fund on-chain",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-29T09:46:52.660061"
+    },
+    {
+      "title": "Crypto needs a reset before the next bull run",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-29T09:46:52.660061"
+    },
+    {
+      "title": "Washington sues Kalshi as states ramp up legal pressure against prediction markets",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-29T09:46:52.660061"
+    },
+    {
+      "title": "Kalshi secures license to offer margin trading to institutional investors",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-03-29T09:46:52.660061"
+    },
+    {
+      "title": "Trump Brothers' American Bitcoin Hits BTC Milestone as Stock Falls to Lowest Price Since IPO",
+      "source": "Decrypt",
+      "used_at": "2026-03-31T01:56:58.048117"
+    },
+    {
+      "title": "Ethereum Foundation Backs 'Economic Zone' to Solve Fragmentation Issues",
+      "source": "Decrypt",
+      "used_at": "2026-03-31T01:56:58.048117"
+    },
+    {
+      "title": "BitGo expands Canton Coin services with trading, onchain settlement",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-31T01:56:58.048117"
+    },
+    {
+      "title": "XRP price charts flash bottom signals as bulls defend $1.30",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-03-31T01:56:58.048117"
+    },
+    {
+      "title": "Bitcoin Price Teeters on Iran Talks as Geopolitics and Options Flows Trap Price in Narrow Range",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-03-31T01:56:58.048117"
+    },
+    {
+      "title": "Bitcoin Gets Its First Bond Rating as Moody's Grades New Hampshire Deal",
+      "source": "Decrypt",
+      "used_at": "2026-04-02T01:26:22.185294"
+    },
+    {
+      "title": "The Protocol: Quantum computing could break Bitcoin sooner, says Google",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-02T01:26:22.185294"
+    },
+    {
+      "title": "Jamie Dimon signals JPMorgan entry into prediction markets as competition surges",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-02T01:26:22.185294"
+    },
+    {
+      "title": "HRF’s Bitcoin Development Fund Announces Support for 26 Projects Worldwide",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-04-02T01:26:22.185294"
+    },
+    {
+      "title": "Cango raises capital as it faces NYSE delisting risk with shares below $1",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-02T01:26:22.185294"
+    },
+    {
+      "title": "Crypto exchange Bithumb to delay IPO until after 2028: Report",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-02T08:19:11.676732"
+    },
+    {
+      "title": "US Treasury seeks public input for state-level stablecoin regulations",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-02T08:19:11.676732"
+    },
+    {
+      "title": "These Three Altcoins Just Got Leveraged Crypto ETFs",
+      "source": "Decrypt",
+      "used_at": "2026-04-02T08:19:11.676732"
+    },
+    {
+      "title": "Hyperliquid whale makes $80M bet on market crash: Is Bitcoin in trouble?",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-02T08:19:11.676732"
+    },
+    {
+      "title": "EDX seeks OCC trust bank charter for institutional crypto custody",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-02T08:19:11.676732"
+    },
+    {
+      "title": "Solana DeFi Exchange Drift Protocol Exploited, Upwards of $285 Million Stolen",
+      "source": "Decrypt",
+      "used_at": "2026-04-02T08:21:52.291233"
+    },
+    {
+      "title": "Pro-crypto PAC to be headed by Tether executive ahead of US midterms",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-02T08:21:52.291233"
+    },
+    {
+      "title": "Google's Veo 3.1 Lite Cuts API Costs in Half as OpenAI's Sora Exits the Market",
+      "source": "Decrypt",
+      "used_at": "2026-04-02T08:21:52.291233"
+    },
+    {
+      "title": "Citadel-backed EDX Markets applies for U.S. trust charter to expand institutional crypto services",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-02T08:21:52.291233"
+    },
+    {
+      "title": "Elon Musk’s SpaceX Files Confidentially for Record-Breaking $1.75 Trillion IPO",
+      "source": "Decrypt",
+      "used_at": "2026-04-02T08:21:52.291233"
+    },
+    {
+      "title": "US Attorney's Office Recovers $600K in Crypto Fraud Scheme Targeting Ledger Wallet Owners",
+      "source": "Decrypt",
+      "used_at": "2026-04-02T23:43:54.485624"
+    },
+    {
+      "title": "Bitcoin Treasuries Are Cracking as Public Companies Turn into BTC Sellers",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-04-02T23:43:54.485624"
+    },
+    {
+      "title": "Oil shock, Iran war risk keep crypto investors on sidelines: Grayscale",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-02T23:43:54.485624"
+    },
+    {
+      "title": "Metaplanet Surpasses MARA Holdings to Become Third-Largest Corporate Bitcoin Holder",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-04-02T23:43:54.485624"
+    },
+    {
+      "title": "Wallet in Telegram launches perpetual futures trading with Lighter",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-02T23:43:54.485624"
+    },
+    {
+      "title": "MARA Conducts Ongoing Layoffs Following $1.1B Bitcoin Sale and Debt Reduction Push",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-04-03T07:07:03.310413"
+    },
+    {
+      "title": "USDC Stablecoin Issuer Circle Unveils New Token to Give Bitcoin More Utility",
+      "source": "Decrypt",
+      "used_at": "2026-04-03T07:07:03.310413"
+    },
+    {
+      "title": "Google Researchers Reveal Every Way Hackers Can Trap, Hijack AI Agents",
+      "source": "Decrypt",
+      "used_at": "2026-04-03T07:07:03.310413"
+    },
+    {
+      "title": "Polymarket expands into equities and commodities with Pyth price feeds",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T07:07:03.310413"
+    },
+    {
+      "title": "CFTC sues 3 states over prediction market regulatory authority",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T07:07:03.310413"
+    },
+    {
+      "title": "Crypto market structure bill release pushed back as industries view revised stablecoin yield compromise this week",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-03T07:23:36.260078"
+    },
+    {
+      "title": "Stablecoin supply reaches $315B in Q1 as USDC rises, USDT declines",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T07:23:36.260078"
+    },
+    {
+      "title": "Rocky US economy, private credit stress, war, impact Bitcoin’s odds for $75K rally",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T07:23:36.260078"
+    },
+    {
+      "title": "X mulls new rules for first-time crypto posts amid tortoise scam",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T07:23:36.260078"
+    },
+    {
+      "title": "Elon Musk's X Is Making Big Changes to Combat Crypto Scams",
+      "source": "Decrypt",
+      "used_at": "2026-04-03T07:23:36.260078"
+    },
+    {
+      "title": "Drift Protocol's $285 Million Exploit on Solana Raises Questions Over DeFi Security",
+      "source": "Decrypt",
+      "used_at": "2026-04-03T07:33:12.169568"
+    },
+    {
+      "title": "Here’s why bitcoin’s drop below $68,000 raises the risk of a crash under $60,000",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-03T07:33:12.169568"
+    },
+    {
+      "title": "Ether at risk of new 2026 lows if bulls fail to turn $2.4K into support",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T07:33:12.169568"
+    },
+    {
+      "title": "Google Jumps Back Into the Open Source AI Race With Gemma 4",
+      "source": "Decrypt",
+      "used_at": "2026-04-03T07:33:12.169568"
+    },
+    {
+      "title": "Coinbase Links Up With Linux Foundation to Launch x402 Foundation",
+      "source": "Decrypt",
+      "used_at": "2026-04-03T07:33:12.169568"
+    },
+    {
+      "title": "Polymarket Inks US, Canada Deal with European Soccer League LaLiga",
+      "source": "Decrypt",
+      "used_at": "2026-04-03T19:30:49.362680"
+    },
+    {
+      "title": "Naoris Protocol's quantum-resistant blockchain goes live as Bitcoin and Ethereum face 'Q-Day' threats",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-03T19:30:49.362680"
+    },
+    {
+      "title": "South Korean brokerage Korea Investment & Securities eyes Coinone stake: Report",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T19:30:49.362680"
+    },
+    {
+      "title": "Crypto hackers steal $169M from 34 DeFi protocols in Q1: DefiLlama",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T19:30:49.362680"
+    },
+    {
+      "title": "Bitcoin supply in profit heads to ‘true bear market’ levels",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-03T19:30:49.362680"
+    },
+    {
+      "title": "Ethereum Foundation nearly reaches 70,000 staked ETH goal",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-04T08:32:24.415593"
+    },
+    {
+      "title": "Charles Schwab Is Gearing Up to Offer Bitcoin, Ethereum Spot Trading",
+      "source": "Decrypt",
+      "used_at": "2026-04-04T08:32:24.416594"
+    },
+    {
+      "title": "FIFA Inks World Cup Prediction Market Deal With ADI Predictstreet",
+      "source": "Decrypt",
+      "used_at": "2026-04-04T08:32:24.416594"
+    },
+    {
+      "title": "Cambodian lawmakers propose severe prison time for crypto scammers",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-04T08:32:24.416594"
+    },
+    {
+      "title": "Charles Schwab Teases Direct Bitcoin Trading With New ‘Schwab Crypto’ Account",
+      "source": "Bitcoin Magazine",
+      "used_at": "2026-04-04T08:32:24.416594"
+    },
+    {
+      "title": "Telegram founder Pavel Durov says Iranian government's ban backfired",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-05T05:30:47.201734"
+    },
+    {
+      "title": "Bitcoin tends to outperform gold and stocks after global shocks, Mercado Bitcoin finds",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-05T05:30:47.201734"
+    },
+    {
+      "title": "Jimmy Song explains why Bitcoin needs a 'conservative' node client",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-05T05:30:47.201734"
+    },
+    {
+      "title": "Ex-UK Chancellor backs bitcoin as alternative to failing systems",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-05T05:30:47.201734"
+    },
+    {
+      "title": "Digital asset treasuries must now earn their keep",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-05T05:30:47.201734"
+    },
+    {
+      "title": "Bitcoin reaches highest level of bearish chatter in 5 weeks: Santiment",
+      "source": "Cointelegraph.com News",
+      "used_at": "2026-04-05T14:31:58.696824"
+    },
+    {
+      "title": "Bitcoin's $1.3 trillion security race: Key initiatives aimed at quantum-proofing the world's largest blockchain",
+      "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+      "used_at": "2026-04-05T14:31:58.696824"
+    },
+    {
+      "title": "AI Giant Anthropic Files to Launch 'AnthroPAC' Amid Clash With Trump Administration",
+      "source": "Decrypt",
+      "used_at": "2026-04-05T14:31:58.696824"
+    }
+  ],
+  "last_updated": "2026-04-05T14:31:58.696824"
+}

@@ -209,7 +209,7 @@ def _validate_dual_script(text: str) -> bool:
 
 def _validate_translation_length(subtitle: str, target_lang: str) -> bool:
     """Check if translation meets length constraints."""
-    limits = {"ko": 500, "ja": 400}
+    limits = {"ko": 500, "ja": 400, "es": 520}
     limit = limits.get(target_lang)
     if limit and len(subtitle) > limit:
         return False
@@ -222,12 +222,13 @@ def translate_script(script: str, target_lang: str) -> tuple[str, str]:
       - display_script: numbers as digits ($71,835, 1.84%) for subtitles
       - tts_script: numbers spelled out for natural TTS reading
     """
-    lang_names = {"ko": "Korean", "ja": "Japanese", "en": "English"}
+    lang_names = {"ko": "Korean", "ja": "Japanese", "en": "English", "es": "Spanish"}
     lang_name = lang_names.get(target_lang, target_lang)
 
     length_hint = {
         "ko": "- IMPORTANT: Keep under 500 characters total (for SUBTITLE version). Translate faithfully but concisely. Cut filler, do NOT expand beyond the original.\n",
         "ja": "- CRITICAL: Keep under 400 characters total (for SUBTITLE version). Aggressively shorten to about 55% of the English version. Cut all filler, combine sentences. Brevity > completeness.\n",
+        "es": "- CRITICAL: Keep under 520 characters total (for SUBTITLE version). Spanish is ~30% longer than English — aggressively shorten. Cut filler, merge sentences, drop adjectives. Brevity > completeness.\n",
     }
 
     number_examples = {
@@ -238,6 +239,10 @@ def translate_script(script: str, target_lang: str) -> tuple[str, str]:
         "ja": (
             "  SUBTITLE: ビットコインは$71,835で取引されており、24時間で1.84%上昇しました。\n"
             "  VOICE: ビットコインは七万千八百三十五ドルで取引されており、二十四時間で一点八四パーセント上昇しました。\n"
+        ),
+        "es": (
+            "  SUBTITLE: Bitcoin cotiza a $71,835, con un alza de 1.84% en 24 horas.\n"
+            "  VOICE: Bitcoin cotiza a setenta y un mil ochocientos treinta y cinco dólares, con un alza de uno punto ochenta y cuatro por ciento en veinticuatro horas.\n"
         ),
     }
 
@@ -285,16 +290,59 @@ def translate_script(script: str, target_lang: str) -> tuple[str, str]:
 
         # Validate length
         if not _validate_translation_length(subtitle, target_lang):
-            limits = {"ko": 500, "ja": 400}
+            limits = {"ko": 500, "ja": 400, "es": 520}
             limit = limits.get(target_lang, 0)
             print(f"  [WARN] {lang_name} subtitle too long: {len(subtitle)} chars (limit: {limit}) "
                   f"(attempt {attempt + 1}/{MAX_LLM_RETRIES + 1})")
             if attempt < MAX_LLM_RETRIES:
                 continue
+            # Final fallback: force-truncate via LLM
+            subtitle, voice = _force_shorten_translation(subtitle, voice, target_lang, limit)
 
         return subtitle, voice
 
     return subtitle, voice
+
+
+def _force_shorten_translation(subtitle: str, voice: str, target_lang: str, limit: int) -> tuple[str, str]:
+    """Force-shorten a translation that exceeded the character limit after all retries."""
+    lang_names = {"ko": "Korean", "ja": "Japanese", "en": "English", "es": "Spanish"}
+    lang_name = lang_names.get(target_lang, target_lang)
+    print(f"  [TRUNCATE] Force-shortening {lang_name} subtitle from {len(subtitle)} to {limit} chars")
+
+    prompt = (
+        f"This {lang_name} subtitle text is {len(subtitle)} characters but MUST be under {limit} characters.\n"
+        f"Aggressively shorten it: drop sentences from the end, remove adjectives, merge ideas.\n"
+        f"Keep the opening and key facts. Output ONLY the shortened text, nothing else.\n\n"
+        f"Text:\n{subtitle}"
+    )
+    shortened = _call_llm(prompt).strip()
+
+    if len(shortened) <= limit:
+        print(f"  [TRUNCATE] OK: {len(shortened)} chars")
+        # Also shorten voice version proportionally
+        voice_prompt = (
+            f"This is a shortened {lang_name} subtitle for Bitcoin news. "
+            f"Rewrite it as a VOICE version: spell out ALL numbers/prices/percentages in {lang_name}. "
+            f"Same meaning, same sentences — only number formatting differs.\n\n"
+            f"Subtitle:\n{shortened}"
+        )
+        voice = _call_llm(voice_prompt).strip()
+        return shortened, voice
+    else:
+        # Hard truncate at sentence boundary as last resort
+        print(f"  [TRUNCATE] Still too long ({len(shortened)} chars), hard-cutting at sentence boundary")
+        sentences = shortened.replace("。", ".").replace("？", "?").replace("！", "!").split(".")
+        result = ""
+        for s in sentences:
+            candidate = (result + s + ".").strip()
+            if len(candidate) > limit:
+                break
+            result = candidate
+        if not result:
+            result = shortened[:limit]
+        print(f"  [TRUNCATE] Final: {len(result)} chars")
+        return result, voice
 
 
 def prepare_display_script(tts_script: str) -> str:
@@ -436,7 +484,7 @@ def generate_education_title_and_description(script: str, topic: str) -> dict:
 
 def translate_title_and_description(metadata: dict, target_lang: str) -> dict:
     """Translate title and description to another language."""
-    lang_names = {"ko": "Korean", "ja": "Japanese", "en": "English"}
+    lang_names = {"ko": "Korean", "ja": "Japanese", "en": "English", "es": "Spanish"}
     lang_name = lang_names.get(target_lang, target_lang)
 
     prompt = (

@@ -28,8 +28,8 @@ RSS_FEEDS = [
     "https://bitcoinmagazine.com/.rss/full/",
 ]
 
-# History file to track previously used articles (top-level data/ for easy access)
-HISTORY_DIR = Path(__file__).resolve().parent.parent / "data"
+# History file to track previously used articles
+HISTORY_DIR = Path(__file__).resolve().parent.parent / "_internal" / "data"
 HISTORY_FILE = HISTORY_DIR / "article_history.json"
 
 # Similarity threshold for deduplication (0.0 ~ 1.0)
@@ -194,7 +194,7 @@ def fetch_rss_news(max_age_hours: int = 24) -> list[dict]:
 
 
 def fetch_bitcoin_price() -> dict | None:
-    """Fetch current Bitcoin price, 24h change, high/low/volume from CoinGecko.
+    """Fetch current Bitcoin price, 24h change, high/low/volume + 7D sparkline from CoinGecko.
     Returns None if all attempts fail (pipeline should handle this).
     """
     url = "https://api.coingecko.com/api/v3/coins/bitcoin"
@@ -203,16 +203,18 @@ def fetch_bitcoin_price() -> dict | None:
         "tickers": "false",
         "community_data": "false",
         "developer_data": "false",
-        "sparkline": "false",
+        "sparkline": "true",
     }
 
     def _fetch():
         resp = requests.get(url, params=params, timeout=10)
         resp.raise_for_status()
-        market = resp.json().get("market_data", {})
+        data = resp.json()
+        market = data.get("market_data", {})
         price_usd = market.get("current_price", {}).get("usd", 0)
         if price_usd <= 0:
             raise ValueError(f"Invalid BTC price: {price_usd}")
+        sparkline_raw = market.get("sparkline_7d", {}).get("price", [])
         return {
             "price_usd": price_usd,
             "change_24h": round(market.get("price_change_percentage_24h", 0), 2),
@@ -220,12 +222,69 @@ def fetch_bitcoin_price() -> dict | None:
             "high_24h": market.get("high_24h", {}).get("usd", 0),
             "low_24h": market.get("low_24h", {}).get("usd", 0),
             "volume_24h": market.get("total_volume", {}).get("usd", 0),
+            "sparkline_7d": sparkline_raw,
         }
 
     try:
         return _retry_request(_fetch, max_retries=3, base_delay=3.0)
     except Exception as e:
         print(f"[ERROR] Failed to fetch BTC price after retries: {e}")
+        return None
+
+
+def fetch_gold_price() -> dict | None:
+    """Fetch gold price (XAU) in USD from CoinGecko."""
+    url = "https://api.coingecko.com/api/v3/simple/price"
+    params = {
+        "ids": "tether-gold",
+        "vs_currencies": "usd",
+        "include_24hr_change": "true",
+    }
+
+    def _fetch():
+        resp = requests.get(url, params=params, timeout=10)
+        resp.raise_for_status()
+        data = resp.json().get("tether-gold", {})
+        return {
+            "price_usd": round(data.get("usd", 0), 2),
+            "change_24h": round(data.get("usd_24h_change", 0), 2),
+        }
+
+    try:
+        return _retry_request(_fetch, max_retries=2, base_delay=2.0)
+    except Exception as e:
+        print(f"[WARN] Gold price fetch failed: {e}")
+        return None
+
+
+def fetch_dxy() -> dict | None:
+    """Fetch US Dollar Index (DXY) from frankfurter.app (ECB rates).
+    DXY is ~57.6% EUR-weighted, so EUR/USD is a good proxy.
+    """
+    def _fetch():
+        # Get current EUR/USD rate
+        resp = requests.get("https://api.frankfurter.app/latest?from=USD&to=EUR", timeout=10)
+        resp.raise_for_status()
+        eur_rate = resp.json().get("rates", {}).get("EUR", 0)
+        if eur_rate <= 0:
+            raise ValueError("Invalid EUR rate")
+
+        # Get yesterday's rate for change calculation
+        resp_prev = requests.get("https://api.frankfurter.app/latest?from=USD&to=EUR&amount=1", timeout=10)
+        resp_prev.raise_for_status()
+
+        # DXY approximation from EUR/USD inverse, calibrated factor
+        # EUR/USD 1.1476 → DXY≈104, moves inversely
+        dxy_approx = round(1 / eur_rate * 90.62, 1)
+        return {
+            "value": dxy_approx,
+            "change_24h": 0.0,  # frankfurter doesn't provide intraday change
+        }
+
+    try:
+        return _retry_request(_fetch, max_retries=2, base_delay=2.0)
+    except Exception as e:
+        print(f"[WARN] DXY fetch failed: {e}")
         return None
 
 
@@ -273,24 +332,33 @@ def detect_market_sentiment(price_data: dict) -> str:
 
 def fetch_all() -> dict:
     """Fetch all news data and price info.
-    Returns dict with 'articles', 'price', 'sentiment', 'fear_greed', 'fetched_at'.
+    Returns dict with 'articles', 'price', 'sentiment', 'fear_greed',
+    'gold', 'dxy', 'fetched_at'.
     price can be None if API fails - pipeline must handle this.
     """
     price = fetch_bitcoin_price()
     articles = fetch_rss_news()
     sentiment = detect_market_sentiment(price)
     fear_greed = fetch_fear_greed()
+    gold = fetch_gold_price()
+    dxy = fetch_dxy()
 
     if sentiment in ("surge", "crash"):
         print(f"  [MARKET] Detected {sentiment.upper()} ({price['change_24h']:+.2f}%)")
     if fear_greed:
         print(f"  [F&G] Fear & Greed: {fear_greed['value']} ({fear_greed['label']})")
+    if gold:
+        print(f"  [GOLD] ${gold['price_usd']:,.0f} ({gold['change_24h']:+.2f}%)")
+    if dxy:
+        print(f"  [DXY] {dxy['value']} ({dxy['change_24h']:+.2f}%)")
 
     return {
         "articles": articles,
         "price": price,
         "sentiment": sentiment,
         "fear_greed": fear_greed,
+        "gold": gold,
+        "dxy": dxy,
         "fetched_at": datetime.now().isoformat(),
     }
 

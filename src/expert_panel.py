@@ -243,7 +243,7 @@ def run_panel(
 
     # Save result
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    panel_dir = OUTPUT_DIR / "panel"
+    panel_dir = OUTPUT_DIR / "_build" / "panel"
     panel_dir.mkdir(parents=True, exist_ok=True)
 
     result = {

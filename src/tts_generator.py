@@ -34,7 +34,7 @@ def generate_audio(
     if not output_filename:
         output_filename = "narration.mp3"
 
-    output_path = OUTPUT_DIR / "audio" / output_filename
+    output_path = OUTPUT_DIR / "_build" / "audio" / output_filename
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     if tts_engine == "google":

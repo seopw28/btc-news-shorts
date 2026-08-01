@@ -7,17 +7,22 @@ __pycache__/
 .venv/
 venv/
 
-# Output files (large media)
-output/audio/
-output/video/
-output/final/
-output/logs/
+# Output build artifacts (large media)
+output/_build/
 
-# Assets (large media, manage separately)
-assets/backgrounds/*.mp4
-assets/backgrounds/*.mov
-assets/music/*.mp3
-assets/music/*.wav
+# Output user files (track selectively)
+output/bgm/*.mp3
+output/reports/*.pdf
+
+# Internal assets (large media, manage separately)
+_internal/assets/backgrounds/*.mp4
+_internal/assets/backgrounds/*.mov
+_internal/assets/music/*.mp3
+_internal/assets/music/*.wav
+
+# Internal data (runtime state)
+_internal/data/checkpoints/
+_internal/data/youtube_quota.json
 
 # IDE
 .vscode/

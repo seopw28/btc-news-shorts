@@ -161,7 +161,7 @@ def _word_count(text: str) -> int:
     return len(text.split())
 
 
-def _detect_silence(audio_path: Path, noise_db: int = -30, min_dur: float = 0.15) -> list[float]:
+def _detect_silence(audio_path: Path, noise_db: int = -30, min_dur: float = 0.07) -> list[float]:
     """Detect silence boundaries in audio using FFmpeg silencedetect.
     Returns list of midpoints of silence intervals (natural break points).
     """
@@ -387,7 +387,7 @@ def generate_subtitles(
         f.write("\n[Events]\n")
         f.write("Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
         sub_cx = VIDEO_WIDTH // 2
-        sub_cy = int(VIDEO_HEIGHT * 0.35)
+        sub_cy = int(VIDEO_HEIGHT * 0.30)
         for i, chunk in enumerate(chunks):
             start_time, end_time = chunk_times[i]
             start_str = _format_ass_time(start_time)
@@ -426,16 +426,290 @@ def get_background_clips(duration: float) -> list:
 
 
 def _find_bgm() -> str | None:
-    """Find a BGM file from assets/music/. Returns path or None."""
-    music_dir = ASSETS_DIR / "music"
-    if not music_dir.exists():
-        return None
+    """Find a BGM file from assets/music/ or output/bgm/. Returns path or None."""
+    search_dirs = [ASSETS_DIR / "music", OUTPUT_DIR / "bgm"]
     files = []
-    for ext in ("*.mp3", "*.wav", "*.ogg", "*.m4a"):
-        files.extend(glob_mod.glob(str(music_dir / ext)))
+    for music_dir in search_dirs:
+        if not music_dir.exists():
+            continue
+        for ext in ("*.mp3", "*.wav", "*.ogg", "*.m4a"):
+            files.extend(glob_mod.glob(str(music_dir / ext)))
     if not files:
         return None
     return random.choice(files)
+
+
+def _generate_sparkline_png(sparkline_data: list, output_dir: Path, width: int = 800, height: int = 120) -> Path | None:
+    """Generate a 7D sparkline chart as transparent PNG for ffmpeg overlay."""
+    if not sparkline_data or len(sparkline_data) < 10:
+        return None
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        fig, ax = plt.subplots(figsize=(width / 100, height / 100), dpi=100)
+        fig.patch.set_alpha(0)
+        ax.set_facecolor("none")
+
+        prices = np.array(sparkline_data)
+        x = np.arange(len(prices))
+
+        # Line
+        ax.plot(x, prices, color="#F7931A", linewidth=2, solid_capstyle="round")
+        # Fill under
+        ax.fill_between(x, prices.min(), prices, alpha=0.15, color="#F7931A")
+        # Current price dot
+        ax.plot(x[-1], prices[-1], "o", color="#F7931A", markersize=6)
+
+        ax.set_xlim(0, len(prices) - 1)
+        ax.axis("off")
+        ax.margins(0, 0.05)
+        fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+
+        png_path = output_dir / "sparkline_7d.png"
+        png_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(png_path, transparent=True, bbox_inches="tight", pad_inches=0)
+        plt.close(fig)
+        return png_path
+    except ImportError:
+        print("  [WARN] matplotlib not installed, skipping sparkline chart")
+        return None
+
+
+def _generate_vertical_chart_png(sparkline_data: list, output_dir: Path, width: int = 310, height: int = 460) -> Path | None:
+    """Generate vertical candlestick chart (7D) for left panel overlay."""
+    if not sparkline_data or len(sparkline_data) < 10:
+        return None
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        fig, ax = plt.subplots(figsize=(width / 100, height / 100), dpi=100)
+        fig.patch.set_alpha(0)
+        ax.set_facecolor("none")
+
+        prices = np.array(sparkline_data)
+        n = len(prices)
+        seg = n // 7
+        closes = []
+        for i in range(7):
+            s = i * seg
+            e = s + seg if i < 6 else n
+            segment = prices[s:e]
+            op, cl = segment[0], segment[-1]
+            hi, lo = segment.max(), segment.min()
+            closes.append(cl)
+
+            is_up = cl >= op
+            color = '#22C55E' if is_up else '#FF5555'
+
+            # Wick (high-low range)
+            ax.plot([i, i], [lo, hi], color=color, linewidth=2, alpha=0.5, solid_capstyle='round')
+            # Body (open-close range)
+            body_lo = min(op, cl)
+            body_hi = max(op, cl)
+            body_h = max(body_hi - body_lo, (hi - lo) * 0.03)
+            ax.bar(i, body_h, bottom=body_lo, width=0.55, color=color, alpha=0.85,
+                   edgecolor=color, linewidth=0.5)
+
+        # Connecting line through daily closes
+        ax.plot(range(7), closes, color='#F7931A', linewidth=1.5, alpha=0.5, zorder=3)
+        # Current price dot
+        ax.plot(6, closes[-1], 'o', color='#F7931A', markersize=7, zorder=5)
+
+        price_range = prices.max() - prices.min()
+        ax.set_ylim(prices.min() - price_range * 0.05, prices.max() + price_range * 0.05)
+        ax.set_xlim(-0.6, 6.6)
+        ax.axis('off')
+        fig.subplots_adjust(left=0.02, right=0.98, top=0.98, bottom=0.02)
+
+        png_path = output_dir / "vertical_chart_7d.png"
+        png_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(png_path, transparent=True, bbox_inches='tight', pad_inches=0.02)
+        plt.close(fig)
+        return png_path
+    except ImportError:
+        print("  [WARN] matplotlib not installed, skipping vertical chart")
+        return None
+
+
+def _escape_drawtext(text: str) -> str:
+    """Escape text for FFmpeg drawtext filter."""
+    text = text.replace("\\", "\\\\")
+    text = text.replace(":", "\\:")
+    text = text.replace("'", "\u2019")
+    text = text.replace(";", "\\;")
+    text = text.replace("$", "＄")
+    text = text.replace("%", "%%")
+    return text
+
+
+def _generate_prediction_bar_png(
+    bullish_pct: float, output_dir: Path,
+    width: int = 640, height: int = 140,
+) -> Path | None:
+    """Generate a BULLISH vs BEARISH prediction bar as transparent PNG.
+
+    Args:
+        bullish_pct: Bullish probability (0-100). Bearish = 100 - bullish.
+    """
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        import matplotlib.patches as mpatches
+
+        bearish_pct = 100 - bullish_pct
+        is_bullish = bullish_pct >= bearish_pct
+
+        fig, ax = plt.subplots(figsize=(width / 100, height / 100), dpi=100)
+        fig.patch.set_alpha(0)
+        ax.set_facecolor("none")
+
+        bar_y = 0.35
+        bar_h = 0.30
+        gap = 0.008  # gap between bars
+
+        bull_color = "#22C55E" if is_bullish else "#1A7A3A"
+        bear_color = "#FF5555" if not is_bullish else "#993333"
+
+        bull_w = (bullish_pct / 100) - gap / 2
+        bear_w = (bearish_pct / 100) - gap / 2
+        bear_x = bull_w + gap
+
+        # Bullish bar (left)
+        bull_rect = mpatches.FancyBboxPatch(
+            (0, bar_y), bull_w, bar_h,
+            boxstyle="round,pad=0.01", facecolor=bull_color,
+            edgecolor="none", alpha=0.95,
+        )
+        ax.add_patch(bull_rect)
+
+        # Bearish bar (right)
+        bear_rect = mpatches.FancyBboxPatch(
+            (bear_x, bar_y), bear_w, bar_h,
+            boxstyle="round,pad=0.01", facecolor=bear_color,
+            edgecolor="none", alpha=0.95,
+        )
+        ax.add_patch(bear_rect)
+
+        # Winner glow effect (subtle outline on dominant side)
+        if is_bullish:
+            glow = mpatches.FancyBboxPatch(
+                (0, bar_y), bull_w, bar_h,
+                boxstyle="round,pad=0.01", facecolor="none",
+                edgecolor="#22C55E", linewidth=2, alpha=0.6,
+            )
+            ax.add_patch(glow)
+        else:
+            glow = mpatches.FancyBboxPatch(
+                (bear_x, bar_y), bear_w, bar_h,
+                boxstyle="round,pad=0.01", facecolor="none",
+                edgecolor="#FF5555", linewidth=2, alpha=0.6,
+            )
+            ax.add_patch(glow)
+
+        # Labels
+        label_size = 13
+        pct_size = 18
+        # "BULLISH" label + percentage
+        bull_label_weight = "bold" if is_bullish else "normal"
+        ax.text(
+            bull_w / 2, 0.88, "BULLISH",
+            ha="center", va="center", fontsize=label_size,
+            color="white", fontweight=bull_label_weight, alpha=0.9,
+        )
+        ax.text(
+            bull_w / 2, 0.12, f"{bullish_pct:.0f}%",
+            ha="center", va="center", fontsize=pct_size,
+            color=bull_color, fontweight="bold",
+        )
+        # "BEARISH" label + percentage
+        bear_label_weight = "bold" if not is_bullish else "normal"
+        ax.text(
+            bear_x + bear_w / 2, 0.88, "BEARISH",
+            ha="center", va="center", fontsize=label_size,
+            color="white", fontweight=bear_label_weight, alpha=0.9,
+        )
+        ax.text(
+            bear_x + bear_w / 2, 0.12, f"{bearish_pct:.0f}%",
+            ha="center", va="center", fontsize=pct_size,
+            color=bear_color, fontweight="bold",
+        )
+
+        # Winner arrow indicator
+        if is_bullish:
+            ax.text(bull_w / 2, bar_y + bar_h / 2, "▲",
+                    ha="center", va="center", fontsize=20, color="white", alpha=0.9)
+        else:
+            ax.text(bear_x + bear_w / 2, bar_y + bar_h / 2, "▼",
+                    ha="center", va="center", fontsize=20, color="white", alpha=0.9)
+
+        ax.set_xlim(-0.02, 1.02)
+        ax.set_ylim(-0.05, 1.05)
+        ax.axis("off")
+        fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+
+        png_path = output_dir / "prediction_bar.png"
+        png_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(png_path, transparent=True, bbox_inches="tight", pad_inches=0.02)
+        plt.close(fig)
+        return png_path
+    except ImportError:
+        print("  [WARN] matplotlib not installed, skipping prediction bar")
+        return None
+
+
+# Max headline characters per language (beyond this, text gets clipped in video)
+HEADLINE_MAX_LEN = {
+    "en": 45,
+    "ko": 22,
+    "ja": 22,
+    "es": 40,
+}
+HEADLINE_MAX_LEN_DEFAULT = 40
+
+
+def _truncate_headline(headline: str, lang: str = "en") -> str:
+    """Truncate headline to fit within video width for the given language.
+
+    For EN: cuts at word boundary and appends '...'
+    For KO/JA: cuts at character boundary and appends '...'
+    """
+    max_len = HEADLINE_MAX_LEN.get(lang, HEADLINE_MAX_LEN_DEFAULT)
+    if len(headline) <= max_len:
+        return headline
+
+    truncated = headline[:max_len]
+    if lang in ("en", "es"):
+        # Cut at last space to avoid splitting a word
+        last_space = truncated.rfind(" ")
+        if last_space > max_len // 2:
+            truncated = truncated[:last_space]
+    # Remove trailing punctuation that looks awkward before ellipsis
+    truncated = truncated.rstrip(" ,:;!?、，：")
+    return truncated + "..."
+
+
+def _split_headline(headline: str, max_line: int = 20) -> list[str]:
+    """Split headline into max 2 lines at natural break points."""
+    if len(headline) <= max_line:
+        return [headline]
+    mid = len(headline) // 2
+    best = mid
+    for off in range(min(10, mid)):
+        for pos in [mid + off, mid - off]:
+            if 0 < pos < len(headline) and headline[pos] in ' ,、，–—·':
+                best = pos + (1 if headline[pos] == ' ' else 0)
+                break
+        else:
+            continue
+        break
+    return [headline[:best].strip(), headline[best:].strip()]
 
 
 def compose_video(
@@ -445,13 +719,18 @@ def compose_video(
     price_data: dict = None,
     tts_script: str = None,
     fear_greed: dict = None,
+    gold: dict = None,
+    dxy: dict = None,
+    headline: str = None,
+    ta_prediction: dict = None,
+    lang: str = "en",
 ) -> Path:
     """Compose final video with professional design."""
     if not output_filename:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_filename = f"btc_news_{timestamp}.mp4"
 
-    output_path = OUTPUT_DIR / "final" / output_filename
+    output_path = OUTPUT_DIR / "_build" / "final" / output_filename
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     audio_duration = get_audio_duration(audio_path)
@@ -461,7 +740,7 @@ def compose_video(
     # Pass tts_script for accurate timing (matches audio rhythm)
     ass_path, srt_path = generate_subtitles(
         script, audio_duration,
-        OUTPUT_DIR / "video" / output_filename,
+        OUTPUT_DIR / "_build" / "video" / output_filename,
         audio_path=audio_path,
         tts_script=tts_script,
     )
@@ -590,29 +869,46 @@ def compose_video(
     hud_enable = f"enable='gte(t,{HOOK_DURATION})'" if price_data else ""
     hud_suffix = f":{hud_enable}" if hud_enable else ""
 
-    # --- TOP: BITCOIN band removed (v4 design update) ---
+    # --- HEADLINE (article title as static hook at top, single bold line) ---
+    if headline:
+        headline = _truncate_headline(headline, lang=lang)
+        hl_y = int(VIDEO_HEIGHT * 0.08)
+        hl_h = 100
+        hl_text = _escape_drawtext(headline)
+        # Dark background band
+        filter_str += (
+            f",drawbox=x=0:y={hl_y}:w={VIDEO_WIDTH}:h={hl_h}"
+            f":color=0x000000@0.65:t=fill{hud_suffix}"
+        )
+        filter_str += (
+            f",drawtext=text='{hl_text}':"
+            f"fontsize=42:fontcolor=0xFFFFFF:"
+            f"borderw=3:bordercolor=0x000000:"
+            f"x=(w-text_w)/2:y={hl_y + hl_h // 2}-text_h/2{hud_suffix}"
+        )
 
-    # --- SUBTITLE at ~35% height (full width, black bg with top orange accent) ---
-    sub_y = int(VIDEO_HEIGHT * 0.35) - (sub_band_h // 2)
+    # --- SUBTITLE at ~30% height (full width, black bg) ---
+    sub_y = int(VIDEO_HEIGHT * 0.30) - (sub_band_h // 2)
     # Full-width black background box for subtitle
     filter_str += (
         f",drawbox=x=0:y={sub_y}:w={VIDEO_WIDTH}:h={sub_band_h}"
         f":color=0x000000@0.7:t=fill{hud_suffix}"
     )
-    # Top orange accent line on subtitle box
-    filter_str += (
-        f",drawbox=x=0:y={sub_y}:w={VIDEO_WIDTH}:h=4"
-        f":color=0xF7931A:t=fill{hud_suffix}"
-    )
     # Subtitles (rendered via ASS on top)
     filter_str += f",{subtitle_filter}"
 
-    # --- LEFT DATA PANEL at ~57% height ---
+    # --- FULL-WIDTH DATA PANEL (v5: 2-column layout) ---
     if price_data:
-        dp_x = int(VIDEO_WIDTH * 0.05)    # ~54px from left (shifted right)
-        dp_y = int(VIDEO_HEIGHT * 0.57)    # ~1094px
-        dp_w = int(VIDEO_WIDTH * 0.36)     # ~389px wide
-        dp_h = 360  # enough for all rows
+        dp_y = int(VIDEO_HEIGHT * 0.50) - 5   # panel content top
+        dp_bg_y = dp_y - 30                  # panel background 30px above content
+        dp_w = VIDEO_WIDTH                   # full width
+        dp_h = 520                           # panel height (from bg_y)
+        # Content area (left ~82%, right reserved for YT buttons)
+        content_w = int(VIDEO_WIDTH * 0.82)
+        col_w = (content_w - 80) // 2       # each column width
+        lpad = 55                           # left padding (shifted right)
+        col1_x = lpad                       # left column start
+        col2_x = lpad + col_w + 20          # right column start
 
         direction = "+" if change_raw >= 0 else "-"
         change_text = f"{direction}{abs(change_raw):.2f}\uff05"
@@ -631,122 +927,221 @@ def compose_video(
         else:
             vol_str = f"${vol_24h:,.0f}" if vol_24h else "N/A"
 
-        # Panel background (dark with orange border)
+        # Panel background (full width, dark — starts 20px above content)
         filter_str += (
-            f",drawbox=x={dp_x}:y={dp_y}:w={dp_w}:h={dp_h}"
+            f",drawbox=x=0:y={dp_bg_y}:w={dp_w}:h={dp_h}"
             f":color=0x0A0E1B@0.92:t=fill{hud_suffix}"
         )
-        # Orange border (top line)
+        # Top border accent
         filter_str += (
-            f",drawbox=x={dp_x}:y={dp_y}:w={dp_w}:h=3"
-            f":color=0xF7931A@0.25:t=fill{hud_suffix}"
+            f",drawbox=x=0:y={dp_bg_y}:w={dp_w}:h=2"
+            f":color=0xF7931A@0.15:t=fill{hud_suffix}"
         )
         # Left border accent
         filter_str += (
-            f",drawbox=x={dp_x}:y={dp_y}:w=3:h={dp_h}"
-            f":color=0xF7931A@0.25:t=fill{hud_suffix}"
+            f",drawbox=x=0:y={dp_bg_y}:w=2:h={dp_h}"
+            f":color=0xF7931A@0.20:t=fill{hud_suffix}"
         )
-
-        row_x = dp_x + 20  # text left padding
-        val_x = dp_x + dp_w - 20  # value right-aligned
-
-        # Row 0: "BTC/USD" label (orange, larger)
+        # === TOP ROW: BTC/USD + Price + 24H ===
+        # BTC/USD label
         filter_str += (
             f",drawtext=text='BTC/USD':"
-            f"fontsize=26:fontcolor=0xF7931A:"
+            f"fontsize=30:fontcolor=0xF7931A:"
             f"borderw=1:bordercolor=0xF7931A:"
-            f"x={row_x}:y={dp_y + 16}{hud_suffix}"
+            f"x={col1_x}:y={dp_y + 12}{hud_suffix}"
         )
-
-        # Row 1: Price (large white, bigger)
+        # Price (big)
         filter_str += (
             f",drawtext=text='{price_usd}':"
-            f"fontsize=48:fontcolor=0xFFFFFF:"
+            f"fontsize=52:fontcolor=0xFFFFFF:"
             f"borderw=2:bordercolor=0xFFFFFF:"
-            f"x={row_x}:y={dp_y + 52}{hud_suffix}"
+            f"x={col1_x}:y={dp_y + 48}{hud_suffix}"
         )
-
-        # Row 2: 24H change (green/red, larger)
+        # 24H change (next to price)
         filter_str += (
-            f",drawtext=text='24H':"
-            f"fontsize=17:fontcolor=0xFFFFFF@0.35:"
-            f"x={row_x}:y={dp_y + 116}{hud_suffix}"
-        )
-        filter_str += (
-            f",drawtext=text='{change_text}':"
+            f",drawtext=text='24H  {change_text}':"
             f"fontsize=28:fontcolor={pct_color}:"
             f"borderw=1:bordercolor={pct_color}:"
-            f"x={val_x}-text_w:y={dp_y + 112}{hud_suffix}"
+            f"x={col1_x + 290}:y={dp_y + 68}{hud_suffix}"
         )
 
-        # Separator line
-        filter_str += (
-            f",drawbox=x={row_x}:y={dp_y + 150}:w={dp_w - 40}:h=1"
-            f":color=0xF7931A@0.06:t=fill{hud_suffix}"
-        )
-
-        # Row 3: HIGH
-        filter_str += (
-            f",drawtext=text='HIGH':"
-            f"fontsize=17:fontcolor=0xFFFFFF@0.35:"
-            f"x={row_x}:y={dp_y + 164}{hud_suffix}"
-        )
-        filter_str += (
-            f",drawtext=text='{high_str}':"
-            f"fontsize=22:fontcolor=0xFDBA74:"
-            f"x={val_x}-text_w:y={dp_y + 162}{hud_suffix}"
-        )
-
-        # Row 4: LOW
-        filter_str += (
-            f",drawtext=text='LOW':"
-            f"fontsize=17:fontcolor=0xFFFFFF@0.35:"
-            f"x={row_x}:y={dp_y + 200}{hud_suffix}"
-        )
-        filter_str += (
-            f",drawtext=text='{low_str}':"
-            f"fontsize=22:fontcolor=0xFDBA74:"
-            f"x={val_x}-text_w:y={dp_y + 198}{hud_suffix}"
-        )
-
-        # Row 5: VOL
-        filter_str += (
-            f",drawtext=text='VOL':"
-            f"fontsize=17:fontcolor=0xFFFFFF@0.35:"
-            f"x={row_x}:y={dp_y + 236}{hud_suffix}"
-        )
-        filter_str += (
-            f",drawtext=text='{vol_str}':"
-            f"fontsize=22:fontcolor=0xFDBA74:"
-            f"x={val_x}-text_w:y={dp_y + 234}{hud_suffix}"
-        )
-
-        # Separator line
-        filter_str += (
-            f",drawbox=x={row_x}:y={dp_y + 268}:w={dp_w - 40}:h=1"
-            f":color=0xF7931A@0.06:t=fill{hud_suffix}"
-        )
-
-        # Row 6: Fear & Greed
+        # F&G (right side, BIG and prominent)
         fg_value = fear_greed.get("value", 50) if fear_greed else 50
         fg_label = fear_greed.get("label", "Neutral") if fear_greed else "Neutral"
         fg_color = "0x22C55E" if fg_value >= 55 else ("0xFF5555" if fg_value <= 40 else "0xFDBA74")
+        fg_x = content_w - 30
         filter_str += (
-            f",drawtext=text='F\\&G':"
-            f"fontsize=17:fontcolor=0xFFFFFF@0.35:"
-            f"x={row_x}:y={dp_y + 282}{hud_suffix}"
+            f",drawtext=text='FEAR \\& GREED':"
+            f"fontsize=16:fontcolor=0xFFFFFF@0.40:"
+            f"x={fg_x}-text_w:y={dp_y + 14}{hud_suffix}"
         )
         filter_str += (
-            f",drawtext=text='{fg_value} {fg_label}':"
-            f"fontsize=28:fontcolor={fg_color}:"
+            f",drawtext=text='{fg_value}':"
+            f"fontsize=52:fontcolor={fg_color}:"
+            f"borderw=2:bordercolor={fg_color}:"
+            f"x={fg_x}-text_w:y={dp_y + 36}{hud_suffix}"
+        )
+        filter_str += (
+            f",drawtext=text='{fg_label}':"
+            f"fontsize=20:fontcolor={fg_color}:"
             f"borderw=1:bordercolor={fg_color}:"
-            f"x={val_x}-text_w:y={dp_y + 278}{hud_suffix}"
+            f"x={fg_x}-text_w:y={dp_y + 88}{hud_suffix}"
         )
+
+        # Separator
+        filter_str += (
+            f",drawbox=x={lpad}:y={dp_y + 118}:w={content_w - 2*lpad}:h=1"
+            f":color=0xF7931A@0.10:t=fill{hud_suffix}"
+        )
+
+        # === DATA ROWS (bigger fonts, 3-column grid) ===
+        sec_y = dp_y + 132
+
+        # Row 1: HIGH | LOW | VOL
+        data_col_w = (content_w - 2*lpad) // 3
+        for i, (label, value) in enumerate([("HIGH", high_str), ("LOW", low_str), ("VOL", vol_str)]):
+            cx = lpad + i * data_col_w
+            filter_str += (
+                f",drawtext=text='{label}':"
+                f"fontsize=18:fontcolor=0xFFFFFF@0.40:"
+                f"x={cx}:y={sec_y}{hud_suffix}"
+            )
+            filter_str += (
+                f",drawtext=text='{value}':"
+                f"fontsize=28:fontcolor=0xFDBA74:"
+                f"borderw=1:bordercolor=0xFDBA74:"
+                f"x={cx}:y={sec_y + 24}{hud_suffix}"
+            )
+
+        # Row 2: GOLD | DXY
+        gold_price = f"${gold['price_usd']:,.0f}" if gold else "N/A"
+        gold_change_raw = gold.get("change_24h", 0) if gold else 0
+        gold_change = f"{'+' if gold_change_raw >= 0 else ''}{gold_change_raw:.1f}%"
+        gold_color = "0x22C55E" if gold_change_raw >= 0 else "0xFF5555"
+        dxy_val = f"{dxy['value']}" if dxy else "N/A"
+        dxy_change_raw = dxy.get("change_24h", 0) if dxy else 0
+        dxy_change = f"{'+' if dxy_change_raw >= 0 else ''}{dxy_change_raw:.1f}%"
+        dxy_color = "0x22C55E" if dxy_change_raw >= 0 else "0xFF5555"
+
+        row2_y = sec_y + 68
+        # GOLD
+        filter_str += (
+            f",drawtext=text='GOLD':"
+            f"fontsize=18:fontcolor=0xFFFFFF@0.40:"
+            f"x={lpad}:y={row2_y}{hud_suffix}"
+        )
+        filter_str += (
+            f",drawtext=text='{gold_price}':"
+            f"fontsize=26:fontcolor=0xFDBA74:"
+            f"x={lpad}:y={row2_y + 24}{hud_suffix}"
+        )
+        filter_str += (
+            f",drawtext=text='{gold_change}':"
+            f"fontsize=20:fontcolor={gold_color}:"
+            f"x={lpad + 160}:y={row2_y + 28}{hud_suffix}"
+        )
+        # DXY
+        filter_str += (
+            f",drawtext=text='DXY':"
+            f"fontsize=18:fontcolor=0xFFFFFF@0.40:"
+            f"x={lpad + data_col_w}:y={row2_y}{hud_suffix}"
+        )
+        filter_str += (
+            f",drawtext=text='{dxy_val}':"
+            f"fontsize=26:fontcolor=0xFDBA74:"
+            f"x={lpad + data_col_w}:y={row2_y + 24}{hud_suffix}"
+        )
+        filter_str += (
+            f",drawtext=text='{dxy_change}':"
+            f"fontsize=20:fontcolor={dxy_color}:"
+            f"x={lpad + data_col_w + 120}:y={row2_y + 28}{hud_suffix}"
+        )
+
+        # Separator before sparkline
+        spark_sep_y = sec_y + 120
+        filter_str += (
+            f",drawbox=x={lpad}:y={spark_sep_y}:w={content_w - 2*lpad}:h=1"
+            f":color=0xF7931A@0.08:t=fill{hud_suffix}"
+        )
+
+        # 7D label (centered above sparkline area)
+        filter_str += (
+            f",drawtext=text='7D':"
+            f"fontsize=14:fontcolor=0xF7931A@0.45:"
+            f"x={content_w / 2}-text_w/2:y={spark_sep_y + 8}{hud_suffix}"
+        )
+
     else:
-        # No price data — just "BITCOIN" in top band (already rendered above)
         pass
 
-    filter_str += "[v]"
+    # === IMAGE OVERLAYS (sparkline, prediction bar) ===
+    # Collect all PNG overlays, then chain them sequentially
+    overlays = []  # list of (input_args, width, height, x, y)
+
+    # Sparkline chart (only when price_data panel exists)
+    if price_data:
+        sparkline_data = price_data.get("sparkline_7d", [])
+        sparkline_png = _generate_sparkline_png(
+            sparkline_data, OUTPUT_DIR / "_build" / "video"
+        ) if sparkline_data else None
+
+        if sparkline_png:
+            spark_w = content_w - 2*lpad
+            spark_h = 200
+            overlays.append({
+                "png": sparkline_png, "w": spark_w, "h": spark_h,
+                "x": lpad, "y": dp_y + 250, "label": "spark",
+            })
+
+    # TA Prediction bar
+    pred_png = None
+    if ta_prediction:
+        bullish_pct = ta_prediction.get("bullish", 50)
+        pred_png = _generate_prediction_bar_png(
+            bullish_pct, OUTPUT_DIR / "_build" / "video"
+        )
+
+    if pred_png:
+        pred_bar_w = int(VIDEO_WIDTH * 0.82)
+        pred_bar_h = 100
+        pred_bar_x = int(VIDEO_WIDTH * 0.09)
+        pred_bar_y = VIDEO_HEIGHT - pred_bar_h - 60
+        # Dark bg + label drawn before overlay
+        filter_str += (
+            f",drawbox=x={pred_bar_x - 10}:y={pred_bar_y - 28}"
+            f":w={pred_bar_w + 20}:h={pred_bar_h + 38}"
+            f":color=0x0A0E1B@0.85:t=fill{hud_suffix}"
+        )
+        filter_str += (
+            f",drawtext=text='PREDICTION':"
+            f"fontsize=16:fontcolor=0xFFFFFF@0.50:"
+            f"x={pred_bar_x}:y={pred_bar_y - 22}{hud_suffix}"
+        )
+        overlays.append({
+            "png": pred_png, "w": pred_bar_w, "h": pred_bar_h,
+            "x": pred_bar_x, "y": pred_bar_y, "label": "pred",
+        })
+
+    # Chain all overlays
+    if overlays:
+        prev_label = "v_base"
+        filter_str += f"[{prev_label}]"
+        for i, ov in enumerate(overlays):
+            inp_idx = len(input_args) // 2
+            input_args.extend(["-loop", "1", "-t", str(dur), "-i", str(ov["png"])])
+            audio_input_idx += 1
+            is_last = (i == len(overlays) - 1)
+            out_label = "v" if is_last else f"v_ov{i}"
+            filter_str += (
+                f";[{inp_idx}:v]scale={ov['w']}:{ov['h']},"
+                f"format=rgba[{ov['label']}];"
+                f"[{prev_label}][{ov['label']}]overlay="
+                f"x={ov['x']}:y={ov['y']}:"
+                f"enable='gte(t,{HOOK_DURATION})'[{out_label}]"
+            )
+            prev_label = out_label
+    else:
+        filter_str += "[v]"
 
     # ===== AUDIO MIXING (TTS + optional BGM) =====
     if bgm_path:
@@ -796,7 +1191,7 @@ def compose_video(
 
 
 if __name__ == "__main__":
-    test_audio = OUTPUT_DIR / "audio" / "test_narration.mp3"
+    test_audio = OUTPUT_DIR / "_build" / "audio" / "test_narration.mp3"
     if test_audio.exists():
         compose_video(
             audio_path=test_audio,

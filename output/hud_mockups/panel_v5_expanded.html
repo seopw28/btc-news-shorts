@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Data Panel v5 — Full-width BG</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #111;
+    display: flex; justify-content: center; align-items: flex-start;
+    padding: 40px; gap: 50px;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+  }
+
+  .option-wrap { text-align: center; }
+  .option-label { color: #888; font-size: 13px; margin-bottom: 14px; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* Phone frame */
+  .phone {
+    width: 360px; height: 640px;
+    border: 2px solid #333;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    background: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=360&h=640&fit=crop') center/cover no-repeat;
+  }
+  .phone::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.55);
+  }
+
+  /* Subtitle band */
+  .subtitle-band {
+    position: absolute;
+    top: 33%; left: 0; right: 0;
+    height: 74px;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 20px; z-index: 2;
+  }
+  .subtitle-text {
+    color: #fff; font-size: 14px;
+    text-align: center; line-height: 1.5; letter-spacing: 0.5px;
+  }
+
+  /* ===== v4 panel ===== */
+  .panel-v4 {
+    position: absolute;
+    left: 5%; width: 36%;
+    top: 57%;
+    background: rgba(10, 14, 27, 0.92);
+    border-left: 2px solid rgba(247, 147, 26, 0.2);
+    border-top: 2px solid rgba(247, 147, 26, 0.2);
+    padding: 10px 12px;
+    z-index: 2;
+  }
+
+  /* ===== v5 panel — full-width background ===== */
+  .panel-v5-bg {
+    position: absolute;
+    top: 55%;
+    left: 0; right: 0;
+    background: rgba(10, 14, 27, 0.92);
+    border-top: 2px solid rgba(247, 147, 26, 0.15);
+    z-index: 2;
+    padding: 12px 16px 8px;
+  }
+  /* Data content stays left, YT buttons float on top naturally */
+  .panel-v5-content {
+    max-width: 82%;
+  }
+
+  /* YT buttons — float on right side, on top of the same bg */
+  .yt-actions {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 14px;
+    z-index: 4;
+  }
+  /* v4 floating YT */
+  .yt-float {
+    position: absolute;
+    right: 3%; top: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 16px;
+    z-index: 3;
+  }
+
+  .yt-btn {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 2px;
+  }
+  .yt-btn-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: rgba(255,255,255,0.8);
+  }
+  .yt-btn-label {
+    font-size: 7px; color: rgba(255,255,255,0.5);
+  }
+
+  /* === Text styles === */
+  .row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+  .label { font-size: 9px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.5px; }
+  .btc-label { font-size: 13px; color: #F7931A; font-weight: bold; letter-spacing: 0.5px; }
+  .price { font-size: 24px; color: #fff; font-weight: bold; margin: 1px 0 0; }
+  .change-up { color: #22C55E; font-weight: bold; }
+  .change-down { color: #FF5555; font-weight: bold; }
+  .val { font-size: 11px; color: #FDBA74; }
+  .fg-red { color: #FF5555; }
+  .fg-green { color: #22C55E; }
+  .sep { height: 1px; background: rgba(247, 147, 26, 0.08); margin: 6px 0; }
+
+  /* v5 top bar */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2px;
+  }
+  .top-right { text-align: right; padding-top: 2px; }
+  .top-right .label { margin-bottom: 3px; }
+  .top-right .fg-val { font-size: 18px; display: block; line-height: 1.1; font-weight: bold; }
+  .top-right .fg-sub { font-size: 9px; display: block; margin-top: 1px; font-weight: bold; }
+
+  .price-change {
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .price-change .price { font-size: 22px; }
+  .price-change .pct { font-size: 13px; }
+  .pct-label { font-size: 8px; color: rgba(255,255,255,0.3); margin-right: 2px; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 16px;
+  }
+  .section-label {
+    font-size: 8px;
+    color: rgba(247, 147, 26, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 5px;
+  }
+
+  .mini-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+  .mini-label { font-size: 9px; color: rgba(255,255,255,0.35); text-transform: uppercase; }
+  .mini-val { font-size: 11px; color: #FDBA74; }
+  .mini-change { font-size: 9px; margin-left: 3px; }
+  .mini-change.up { color: #22C55E; }
+  .mini-change.down { color: #FF5555; }
+
+  /* Sparkline */
+  .sparkline-section { margin-top: 2px; }
+  .sparkline-label {
+    font-size: 8px;
+    color: rgba(247, 147, 26, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-align: center;
+    margin-bottom: 2px;
+  }
+  .sparkline-svg { width: 100%; height: 32px; display: block; }
+
+  .arrow { font-size: 28px; color: #F7931A; display: flex; align-items: center; }
+</style>
+</head>
+<body>
+
+<!-- ============ CURRENT v4 ============ -->
+<div class="option-wrap">
+  <div class="option-label">Current (v4)</div>
+  <div class="phone">
+    <div class="subtitle-band">
+      <div class="subtitle-text">SEC와 CFTC가 암호화폐<br>공동 규제에 나섰습니다</div>
+    </div>
+    <div class="yt-float">
+      <div class="yt-btn"><div class="yt-btn-icon">&#9825;</div><div class="yt-btn-label">1.2K</div></div>
+      <div class="yt-btn"><div class="yt-btn-icon">&#9997;</div><div class="yt-btn-label">23</div></div>
+      <div class="yt-btn"><div class="yt-btn-icon">&#8594;</div><div class="yt-btn-label">Share</div></div>
+    </div>
+    <div class="panel-v4">
+      <div class="btc-label">BTC/USD</div>
+      <div class="price" style="font-size:26px;">$72,371</div>
+      <div class="row">
+        <span class="label">24H</span>
+        <span class="change-up" style="font-size:16px;">+1.93%</span>
+      </div>
+      <div class="sep"></div>
+      <div class="row"><span class="label">HIGH</span><span class="val">$73,003</span></div>
+      <div class="row"><span class="label">LOW</span><span class="val">$70,894</span></div>
+      <div class="row"><span class="label">VOL</span><span class="val">$29.5B</span></div>
+      <div class="sep"></div>
+      <div class="row">
+        <span class="label">F&G</span>
+        <span class="fg-red" style="font-size:16px; font-weight:bold;">23 Extreme Fear</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="arrow">→</div>
+
+<!-- ============ NEW v5 — full-width bg ============ -->
+<div class="option-wrap">
+  <div class="option-label">New (v5) — Full BG</div>
+  <div class="phone">
+    <div class="subtitle-band">
+      <div class="subtitle-text">SEC와 CFTC가 암호화폐<br>공동 규제에 나섰습니다</div>
+    </div>
+
+    <!-- Full-width dark background panel -->
+    <div class="panel-v5-bg">
+      <!-- Data content (left ~80%) -->
+      <div class="panel-v5-content">
+
+        <!-- TOP: BTC price + F&G -->
+        <div class="top-bar">
+          <div>
+            <div class="btc-label">BTC/USD</div>
+            <div class="price-change">
+              <span class="price">$72,371</span>
+              <span>
+                <span class="pct-label">24H</span>
+                <span class="pct change-up">+1.93%</span>
+              </span>
+            </div>
+          </div>
+          <div class="top-right">
+            <div class="label">F&G</div>
+            <span class="fg-val fg-red">23</span>
+            <span class="fg-sub fg-red">Extreme Fear</span>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- 2-COLUMN: Price | Market -->
+        <div class="two-col">
+          <div>
+            <div class="section-label">Price</div>
+            <div class="mini-row">
+              <span class="mini-label">HIGH</span>
+              <span class="mini-val">$73,003</span>
+            </div>
+            <div class="mini-row">
+              <span class="mini-label">LOW</span>
+              <span class="mini-val">$70,894</span>
+            </div>
+            <div class="mini-row">
+              <span class="mini-label">VOL</span>
+              <span class="mini-val">$29.5B</span>
+            </div>
+          </div>
+          <div>
+            <div class="section-label">Market</div>
+            <div class="mini-row">
+              <span class="mini-label">GOLD</span>
+              <span>
+                <span class="mini-val">$3,042</span>
+                <span class="mini-change up">+0.8%</span>
+              </span>
+            </div>
+            <div class="mini-row">
+              <span class="mini-label">DXY</span>
+              <span>
+                <span class="mini-val">104.2</span>
+                <span class="mini-change down">-0.3%</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <!-- 7D Sparkline -->
+        <div class="sparkline-section">
+          <div class="sparkline-label">7D</div>
+          <svg class="sparkline-svg" viewBox="0 0 300 32" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#F7931A" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#F7931A" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,24 L18,22 L36,26 L54,20 L72,21 L90,17 L108,19 L126,14 L144,16 L162,12 L180,10 L198,13 L216,9 L234,11 L252,7 L270,9 L288,6 L300,8 L300,32 L0,32 Z"
+                  fill="url(#sg)"/>
+            <polyline points="0,24 18,22 36,26 54,20 72,21 90,17 108,19 126,14 144,16 162,12 180,10 198,13 216,9 234,11 252,7 270,9 288,6 300,8"
+                      fill="none" stroke="#F7931A" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="300" cy="8" r="2.5" fill="#F7931A">
+              <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- YT buttons sit on the same dark bg, right side -->
+      <div class="yt-actions">
+        <div class="yt-btn"><div class="yt-btn-icon">&#9825;</div><div class="yt-btn-label">1.2K</div></div>
+        <div class="yt-btn"><div class="yt-btn-icon">&#9997;</div><div class="yt-btn-label">23</div></div>
+        <div class="yt-btn"><div class="yt-btn-icon">&#8594;</div><div class="yt-btn-label">Share</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
